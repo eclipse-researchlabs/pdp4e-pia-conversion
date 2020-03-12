@@ -11,6 +11,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ConfigurationComponent } from './configuration/configuration.component';
 
@@ -30,6 +32,8 @@ import { ConfigurationComponent } from './configuration/configuration.component'
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
     LayoutModule
   ],
   providers: [],
