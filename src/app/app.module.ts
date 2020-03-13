@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { AnalysesViewComponent } from './analyses-view/analyses-view.component';
+import { AnalysesViewComponent, DialogNewPia } from './analyses-view/analyses-view.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -16,6 +16,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog'
 import { LayoutModule } from '@angular/cdk/layout';
 import { ConfigurationComponent } from './configuration/configuration.component';
 
@@ -23,7 +24,8 @@ import { ConfigurationComponent } from './configuration/configuration.component'
   declarations: [
     AppComponent,
     AnalysesViewComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    DialogNewPia
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,11 @@ import { ConfigurationComponent } from './configuration/configuration.component'
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
+    MatDialogModule,
     LayoutModule
+  ],
+  entryComponents: [
+    DialogNewPia
   ],
   providers: [],
   bootstrap: [AppComponent]
