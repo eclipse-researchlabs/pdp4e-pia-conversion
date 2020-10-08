@@ -9,8 +9,8 @@ import { ServersService } from './servers.service';
   providedIn: 'root'
 })
 export class PiaService {
-  pias: any[];
-  private serverUrl: string;
+  //pias: any[];
+  //private serverUrl: string;
 
   constructor(private http: HttpClient,
     private route: ActivatedRoute,
