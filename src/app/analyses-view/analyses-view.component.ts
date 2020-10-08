@@ -3,6 +3,8 @@ import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PiaService } from '../services/pia.service';
+import { RmtService } from '../services/rmt.service';
+import { RiskAssignmentComponent } from '../risk-assignment/risk-assignment.component';
 
 export interface PiaData {
   pia: string,
@@ -19,30 +21,18 @@ export interface PiaData {
 export class AnalysesViewComponent {
   /** Based on the screen size, switch from standard to one column per row */
   //Replace with something like raService.getRaList()
-  cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map(({ matches }) => {
-      if (matches) {
-        return [
+  cards = [
           { title: 'Card 1', cols: 1, rows: 1 },
           { title: 'Card 2', cols: 1, rows: 1 },
           { title: 'Card 3', cols: 1, rows: 1 },
           { title: 'Card 4', cols: 1, rows: 1 }
-        ];
-      }
-
-      return [
-        { title: 'Card 1', cols: 1, rows: 1 },
-        { title: 'Card 2', cols: 1, rows: 1 },
-        { title: 'Card 3', cols: 1, rows: 1 },
-        { title: 'Card 4', cols: 1, rows: 1 }
-      ];
-    })
-  );
+  ];
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
-    private pia: PiaService
+    private pia: PiaService,
+    private rmt: RmtService
   ) {}
 
   openNewPiaDialog()
@@ -53,6 +43,21 @@ export class AnalysesViewComponent {
         console.log(r);
         if(r)
         {
+          //TODO: validation, check if a pia with the same name exists ?
+          //this.pia.addPia(r.pia, r.author, r.evaluator, r.validator);
+        }
+      }
+    );
+  }
+
+  openAssignment(){
+    this.dialog.open(RiskAssignmentComponent, {data:'RA id'})
+    .afterClosed().subscribe(
+      r => {
+        console.log(r);
+        if(r)
+        {
+          //TODO: validation, check if a pia with the same name exists ?
           //this.pia.addPia(r.pia, r.author, r.evaluator, r.validator);
         }
       }

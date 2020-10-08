@@ -17,15 +17,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog'
+import { MatSelectModule } from '@angular/material/select';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ConfigurationComponent } from './configuration/configuration.component';
+import { RiskAssignmentComponent } from './risk-assignment/risk-assignment.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AnalysesViewComponent,
     ConfigurationComponent,
-    DialogNewPia
+    DialogNewPia,
+    RiskAssignmentComponent
   ],
   imports: [
     BrowserModule,
@@ -42,6 +45,7 @@ import { ConfigurationComponent } from './configuration/configuration.component'
     MatInputModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatSelectModule,
     LayoutModule
   ],
   entryComponents: [

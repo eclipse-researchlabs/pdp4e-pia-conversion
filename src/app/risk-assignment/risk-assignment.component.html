@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Assign a category to each risks</h2>
+<mat-form-field appearance="fill">
+    <div>
+        <mat-label>void</mat-label>
+        <mat-select>
+            <mat-option>Access</mat-option>
+            <mat-option>Modication</mat-option>
+            <mat-option>Deletion</mat-option>
+        </mat-select><br/>
+    </div>
+    <div *ngFor="let risk of risks">
+        <mat-label>{{risk.name}}</mat-label>
+        <mat-select>
+            <mat-option>Access</mat-option>
+            <mat-option>Modication</mat-option>
+            <mat-option>Deletion</mat-option>
+        </mat-select><br/>
+    </div>
+    <button mat-button>Ok</button>
+</mat-form-field>
+<button (click)="add()" mat-button>Add row</button>
