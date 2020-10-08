@@ -95,7 +95,7 @@ export class ConversionService {
       this.risks[i]=new Risk(riskCorrespondance[i].name)
       let stride = riskCorrespondance[i].stride;
 
-      let current_risks=this.getRiskByStride(data, stride);
+      let current_risks=this.getPrivacyRisks(data);
 
       let [
         vulnerabilities,
@@ -112,6 +112,17 @@ export class ConversionService {
       this.risks[i].likelihood=this.getLikelihood(likelihoods);
       this.risks[i].severity=this.getSeverity(impacts);
     }
+  }
+
+  //Returns all risks related to privacy: ie with a valid LINDDUN category
+  getPrivacyRisks(data: any): any[] {
+    return data.assets.reduce((acc, asset) => {
+      let val=acc.concat(asset.risks.filter(risk => { return risk.payload.linddun != undefined; })
+      //.map(risk => risk.asset = { id: asset.id, name: asset.name })
+      );
+      val.forEach(risk => risk.asset = { id: asset.id, name: asset.name });
+      return val;
+    },[]);
   }
 
   /* filter risks by stride */
