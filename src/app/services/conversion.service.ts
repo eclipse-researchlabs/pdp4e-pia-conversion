@@ -24,13 +24,18 @@ class Risk {
   impacts: string[] = [];
   threats: string[] = [];
   sources: string[] = [];
-  measures: string[] = [];
+  measures: string[] = [];//contain the names of the measures
   severity: any;
   likelihood: any;
 
   constructor(name: string) {
     this.name = name;
   }
+}
+
+class Measure {
+  name: string;
+  description: string;
 }
 
 @Injectable({
