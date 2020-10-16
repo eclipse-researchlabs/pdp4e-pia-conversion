@@ -9,6 +9,9 @@ import { ServersService } from './servers.service';
 export class RmtService {
   selectedRiskAnalysis: any;
   //riskAnalyses: any[]=[];// Provide a cache for the content stored on the risk management tool. Call refresh() to refresh it
+  //data = require('../../assets/data/data-pdp4e.json');
+  data = require('../../assets/data/data_pdp4e.json');
+  riskData: any;
   riskAnalyses: any[]=[{
     'assets':[
 {
@@ -70,7 +73,10 @@ export class RmtService {
   constructor(
     private http: HttpClient,
     private _servers: ServersService
-  ) { }
+  ) {
+    console.log(this.data.containers[0].assets[0]);
+    this.riskData = this.data.containers[0];
+   }
 
   refresh() {
     //this.getRiskAnalyses()

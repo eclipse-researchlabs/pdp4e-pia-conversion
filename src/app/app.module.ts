@@ -21,14 +21,21 @@ import { MatSelectModule } from '@angular/material/select';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { RiskAssignmentComponent } from './risk-assignment/risk-assignment.component';
-
+import {MatTableModule} from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatStepperModule} from '@angular/material/stepper';
+import { DialogNewPiaComponent } from './dialog-new-pia/dialog-new-pia.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ShowRiskDataComponent } from './show-risk-data/show-risk-data.component';
 @NgModule({
   declarations: [
     AppComponent,
     AnalysesViewComponent,
     ConfigurationComponent,
     DialogNewPia,
-    RiskAssignmentComponent
+    RiskAssignmentComponent,
+    DialogNewPiaComponent,
+    ShowRiskDataComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +53,12 @@ import { RiskAssignmentComponent } from './risk-assignment/risk-assignment.compo
     MatSnackBarModule,
     MatDialogModule,
     MatSelectModule,
-    LayoutModule
+    LayoutModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   entryComponents: [
     DialogNewPia

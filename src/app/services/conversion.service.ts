@@ -120,9 +120,54 @@ export class ConversionService {
       let val=acc.concat(asset.risks.filter(risk => { return risk.payload.linddun != undefined; })
       //.map(risk => risk.asset = { id: asset.id, name: asset.name })
       );
+      console.log(val);
       val.forEach(risk => risk.asset = { id: asset.id, name: asset.name });
       return val;
     },[]);
+  }
+  getPrivacyRisks2(data: any): any[] {
+    return data.reduce((acc, asset) => {
+      let val=acc.concat(asset.risks.filter(risk => { return risk.payload.linddun != undefined; })
+      //.map(risk => risk.asset = { id: asset.id, name: asset.name })
+      );
+      console.log(val);
+      val.forEach(risk => risk.asset = { id: asset.id, name: asset.name });
+      return val;
+    },[]);
+  }
+  getPrivacyRisks1(data: any){
+    var data_risk = [];
+    data.assets.forEach(asset => {
+
+      asset.risks.forEach(risk => {
+        var riskData = {
+          id : risk.id,
+          name : risk.name,
+          description : risk.description,
+          asset : {
+            id : asset.id,
+            name : asset.name,
+          },
+          vulnerabilities : risk.vulnerabilities,
+          treatments : risk.treatments,
+          payload : {
+            stride : risk.payload.stride,
+            lindun : risk.payload.lindun,
+            impact : risk.payload.impact,
+            likelihood : risk.payload.likelihood
+          }
+        }
+        if(risk.payload.lindun!= undefined){
+          console.log(riskData);
+          data_risk.push(riskData);
+        }
+
+      });
+
+
+
+    });
+    return data_risk;
   }
 
   /* filter risks by stride */

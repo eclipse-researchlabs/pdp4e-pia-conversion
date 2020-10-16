@@ -1,10 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PiaService } from '../services/pia.service';
 import { RmtService } from '../services/rmt.service';
 import { RiskAssignmentComponent } from '../risk-assignment/risk-assignment.component';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import {DialogNewPiaComponent} from '../dialog-new-pia/dialog-new-pia.component'
 
 export interface PiaData {
   pia: string,
@@ -21,47 +23,54 @@ export interface PiaData {
 export class AnalysesViewComponent {
   /** Based on the screen size, switch from standard to one column per row */
   //Replace with something like raService.getRaList()
-  cards = [
-          { title: 'Card 1', cols: 1, rows: 1 },
-          { title: 'Card 2', cols: 1, rows: 1 },
-          { title: 'Card 3', cols: 1, rows: 1 },
-          { title: 'Card 4', cols: 1, rows: 1 }
-  ];
+  data = require('../../assets/data/data_pdp4e.json');
+  cards ;
+  i =0;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
     private pia: PiaService,
     private rmt: RmtService
-  ) {}
-
-  openNewPiaDialog()
-  {
-    this.dialog.open(DialogNewPia)
-    .afterClosed().subscribe(
-      r => {
-        console.log(r);
-        if(r)
-        {
-          //TODO: validation, check if a pia with the same name exists ?
-          //this.pia.addPia(r.pia, r.author, r.evaluator, r.validator);
-        }
-      }
-    );
+  ) {
+    this.cards = this.data.containers;
   }
 
-  openAssignment(){
-    this.dialog.open(RiskAssignmentComponent, {data:'RA id'})
-    .afterClosed().subscribe(
-      r => {
-        console.log(r);
-        if(r)
-        {
-          //TODO: validation, check if a pia with the same name exists ?
-          //this.pia.addPia(r.pia, r.author, r.evaluator, r.validator);
-        }
+  openNewPiaDialog(card)
+  {
+    const dialogConfig = new MatDialogConfig();
+    //dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "100%";
+    dialogConfig.data = { data:card };
+   const dialogRef =  this.dialog.open(DialogNewPiaComponent,dialogConfig);
+   dialogRef.afterClosed().subscribe(result => r => {
+     console.log(r);
+     if(r)
+     {
+       //TODO: validation, check if a pia with the same name exists ?
+       //this.pia.addPia(r.pia, r.author, r.evaluator, r.validator);
+     }
+   }
+ );
+  }
+
+  openAssignment(card){
+    const dialogConfig = new MatDialogConfig();
+     //dialogConfig.disableClose = true;
+     dialogConfig.autoFocus = true;
+     dialogConfig.width = "100%";
+     dialogConfig.data = { data:card};
+    const dialogRef =  this.dialog.open(RiskAssignmentComponent,dialogConfig);
+    dialogRef.afterClosed().subscribe(result => r => {
+      console.log(r);
+      if(r)
+      {
+        //TODO: validation, check if a pia with the same name exists ?
+        //this.pia.addPia(r.pia, r.author, r.evaluator, r.validator);
       }
-    );
+    }
+  );
   }
 }
 
