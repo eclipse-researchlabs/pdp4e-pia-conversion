@@ -1,0 +1,185 @@
+{
+  "containers": [
+    {
+      "name": "PDP4E: Smart Vehicle Use Case",
+      "assets": [
+        {
+          "id": "7f112b17-ec9f-4d0b-9100-1acfa468b5d7",
+          "rootId": "7f112b17-ec9f-4d0b-9100-1acfa468b5d7",
+          "name": "Data Store 0",
+          "payload": "{\"Type\":\"node\",\"Color\":\"#5CDBD3\",\"Shape\":\"koni-custom-node-datastore-dfd\",\"Size\":\"70*70\",\"X\":\"117.671875\",\"Y\":\"98.5\",\"Icon\":\"https://pdp4e.beawre.com/img/data_store_icon.svg\",\"Src\":\"https://pdp4e.beawre.com/img/data_store.svg\",\"LabelOffsetY\":\"48\",\"DfdQuestionaire\":[{\"id\":\"DFD-i_ds1\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-i_ds2\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-nc_ds1\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-t_ds1\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-t_ds3\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-t_ds4\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-t_ds5\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-id_ds2\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-id_ds3\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-L_ds3\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-L_ds4\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-L_ds5\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-L_ds6\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-r_ds1\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-r_ds3\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-DS_ds1\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-DS_ds2\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-id_ds1\",\"value\":\"yes\",\"isVisible\":true},{\"id\":\"DFD-r_ds\",\"value\":\"yes\",\"isVisible\":true}]}",
+          "vulnerabilities": [
+            {
+              "id": "054ffe7f-7cec-49b2-9d08-5a4fd5b6afcc",
+              "rootId": "054ffe7f-7cec-49b2-9d08-5a4fd5b6afcc",
+              "name": "Identifiability of Contextual Data",
+              "description": "dsfsd",
+              "payload": null,
+              "cweData": null
+            }
+          ],
+          "treatments": [],
+          "risks": [
+            {
+              "id": "b4e1a758-57bc-471a-a3e6-07d5c9da52ce",
+              "rootId": "b4e1a758-57bc-471a-a3e6-07d5c9da52ce",
+              "name": "r3",
+              "description": "r3",
+              "risks": [],
+              "vulnerabilities": [],
+              "treatments": [
+                {
+                  "id": "7d5123c2-3ba8-4299-91a2-8ecc27267ce9",
+                  "payload": "{\"Evidences\":[],\"Status\":\"Approved\",\"Description\":null}",
+                  "definition": {
+                    "id": "92755589-8fdb-461c-a177-a0723ecf5ccb",
+                    "rootId": "92755589-8fdb-461c-a177-a0723ecf5ccb",
+                    "type": "process",
+                    "name": "dsgsf gfdg dfd fgdf df",
+                    "description": " fgdf df fdgdf dfgdfg"
+                  }
+                },
+                {
+                  "id": "82dff54c-e143-42c0-8a24-9b602686a9a8",
+                  "payload": "{\"Evidences\":[],\"Status\":\"pending-approval\",\"Description\":null}",
+                  "definition": {
+                    "id": "4f8f8975-839e-49ea-94fc-6bee9e4e1cd2",
+                    "rootId": "4f8f8975-839e-49ea-94fc-6bee9e4e1cd2",
+                    "type": "action",
+                    "name": " jgfhj hgjghjgh ghj ghghj",
+                    "description": " jgfhj hgjghjgh ghj ghghj"
+                  }
+                },
+                {
+                  "id": "bcc94c19-7c8a-4fe2-888d-acedf7f875a8",
+                  "payload": "{\"Evidences\":[],\"Status\":\"pending-approval\",\"Description\":null}",
+                  "definition": {
+                    "id": "5c1027b6-ce5a-40dd-9515-cf91bc8d502f",
+                    "rootId": "5c1027b6-ce5a-40dd-9515-cf91bc8d502f",
+                    "type": "configuration",
+                    "name": "f gdf gfhfghfgh fggfh",
+                    "description": "f gdf gfhfghfgh fggfh"
+                  }
+                },
+                {
+                  "id": "4c360f5d-2cf8-4f7a-a3ca-eb71a3512874",
+                  "payload": "{\"Evidences\":[],\"Status\":\"pending-approval\",\"Description\":null}",
+                  "definition": {
+                    "id": "b6b0c532-bdab-41c8-b510-507925d721c1",
+                    "rootId": "b6b0c532-bdab-41c8-b510-507925d721c1",
+                    "type": "feature",
+                    "name": "gr sfdgffd gdfg dffd dfg",
+                    "description": "gr sfdgffd gdfg dffd dfg"
+                  }
+                },
+                {
+                  "id": "e0dbae80-4286-46da-8493-ef156878b209",
+                  "payload": "{\"Evidences\":[],\"Status\":\"Approved\",\"Description\":null}",
+                  "definition": {
+                    "id": "2c5faa6a-183c-4e42-b9cc-04a8e764ede9",
+                    "rootId": "2c5faa6a-183c-4e42-b9cc-04a8e764ede9",
+                    "type": "undefined",
+                    "name": "Review procedures and policies related to enrolment",
+                    "description": ""
+                  }
+                }
+              ],
+              "payload": {
+                "impact": "medium",
+                "impactText": "",
+                "owasp": [
+                  {
+                    "name": "likelihood.Threat Agent Factory.Skill level",
+                    "value": 4
+                  },
+                  {
+                    "name": "likelihood.Vulnerability Factors.Ease of exploit",
+                    "value": 4
+                  },
+                  {
+                    "name": "impact.Technical Impact Factors.Loss of integrity",
+                    "value": 4
+                  },
+                  {
+                    "name": "impact.Business Impact Factors.Non-compliance",
+                    "value": 5
+                  }
+                ],
+                "likelihood": "medium",
+                "likelihoodText": "",
+                "stride": "TAMPERING",
+                "lindun": "Non-repudiation"
+              }
+            },
+            {
+              "id": "538702d6-9d3a-4580-968f-b21a47db502c",
+              "rootId": "538702d6-9d3a-4580-968f-b21a47db502c",
+              "name": "An external observer may identify an entity breaking privacy",
+              "description": "1",
+              "risks": [],
+              "vulnerabilities": [
+                {
+                  "id": "054ffe7f-7cec-49b2-9d08-5a4fd5b6afcc",
+                  "rootId": "054ffe7f-7cec-49b2-9d08-5a4fd5b6afcc",
+                  "name": "Identifiability of Contextual Data",
+                  "description": "dsfsd",
+                  "payload": null
+                }
+              ],
+              "treatments": [
+                {
+                  "id": "8b7a0d9e-b4a9-4db5-82c3-311baf34af53",
+                  "payload": "{\"Evidences\":[],\"Status\":\"pending-approval\",\"Description\":null}",
+                  "definition": {
+                    "id": "2c5faa6a-183c-4e42-b9cc-04a8e764ede9",
+                    "rootId": "2c5faa6a-183c-4e42-b9cc-04a8e764ede9",
+                    "type": "undefined",
+                    "name": "Review procedures and policies related to enrolment",
+                    "description": ""
+                  }
+                },
+                {
+                  "id": "b56aa60c-bccd-4f4d-83c8-a2cd295a08dc",
+                  "payload": "{\"Evidences\":[],\"Status\":\"pending-approval\",\"Description\":null}",
+                  "definition": {
+                    "id": "2c5faa6a-183c-4e42-b9cc-04a8e764ede9",
+                    "rootId": "2c5faa6a-183c-4e42-b9cc-04a8e764ede9",
+                    "type": "undefined",
+                    "name": "Review procedures and policies related to enrolment",
+                    "description": ""
+                  }
+                }
+              ],
+              "payload": {
+                "impact": "medium",
+                "impactText": "",
+                "owasp": [
+                  {
+                    "name": "likelihood.Threat Agent Factory.Skill level",
+                    "value": 2
+                  },
+                  {
+                    "name": "likelihood.Vulnerability Factors.Ease of exploit",
+                    "value": 4
+                  },
+                  {
+                    "name": "impact.Technical Impact Factors.Loss of integrity",
+                    "value": 5
+                  },
+                  {
+                    "name": "impact.Business Impact Factors.Non-compliance",
+                    "value": 5
+                  }
+                ],
+                "likelihood": "low",
+                "likelihoodText": "",
+                "stride": "TAMPERING",
+                "lindun": "Non-repudiation"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
