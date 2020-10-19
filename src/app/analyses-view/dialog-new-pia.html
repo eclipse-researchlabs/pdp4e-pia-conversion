@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>Export to new PIA</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>PIA name</mat-label>
+        <input matInput #pia>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Author</mat-label>
+        <input matInput #author>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Evaluator</mat-label>
+        <input matInput #evaluator>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Validator</mat-label>
+        <input matInput #validator>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="{pia: pia.value, author: author.value, evaluator: evaluator.value, validator: validator.value}">OK</button>
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+</div>
+
+

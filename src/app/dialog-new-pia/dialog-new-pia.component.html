@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <div> <h2 mat-dialog-title class="modal-title">Export to new PIA
+  <button type="button" class="close" style="float:right" data-dismiss="modal" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+</div>
+</div>
+<div>
+<mat-horizontal-stepper #stepper>
+  <mat-step [stepControl]="firstFormGroup" errorMessage="All fields are required.">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>ADD NEW PIA</ng-template>
+      <div mat-dialog-content>
+        <div class="example-container">
+        <mat-form-field appearance="fill" style="width: 50%;">
+            <mat-label>PIA name</mat-label>
+            <input matInput #pia formControlName="firstCtrl1" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 50%;">
+            <mat-label>Author</mat-label>
+            <input matInput #author formControlName="firstCtrl2" required>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill" style="width: 50%;">
+            <mat-label>Evaluator</mat-label>
+            <input matInput #evaluator formControlName="firstCtrl3" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 50%;">
+            <mat-label>Validator</mat-label>
+            <input matInput #validator formControlName="firstCtrl4" required>
+        </mat-form-field>
+      </div>
+    </div>
+
+      <div>
+        <button mat-button matStepperNext  color="primary" cdkFocusInitial mat-raised-button style="float:right">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Export to this new PIA</ng-template>
+      <h3 style="color: rgb(1, 1, 14);">Assign a category to each risks</h3>
+      <mat-dialog-content class="mat-typography">
+        <app-show-risk-data [data_risk] = "data" (lists_Event)="set_category($event)"></app-show-risk-data>
+      </mat-dialog-content>
+      <br>
+      <div>
+        <button mat-button matStepperNext cdkFocusInitial mat-raised-button style="float:right" color="primary" (click)="save_pia()">Save</button>
+        <button mat-button matStepperPrevious cdkFocusInitial mat-raised-button  color="primary">Back</button>
+
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
+</div>

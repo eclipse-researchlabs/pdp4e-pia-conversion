@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <div> <h2 mat-dialog-title class="modal-title">Assign a category to each risks
+  <button type="button" class="close" style="float:right" data-dismiss="modal" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+</div>
+</div>
+<mat-dialog-content class="mat-typography">
+      <app-show-risk-data [data_risk] = "data"></app-show-risk-data>
+</mat-dialog-content>
+<mat-dialog-actions align="end" >
+  <button  mat-button cdkFocusInitial mat-dialog-close mat-raised-button color="primary" >ok</button>
+</mat-dialog-actions>
+
+
+
+    <!--
+
+  <div>
+        <mat-label>void</mat-label>
+        <mat-select>
+            <mat-option>Access</mat-option>
+            <mat-option>Modication</mat-option>
+            <mat-option>Deletion</mat-option>
+        </mat-select><br/>
+    </div>
+  <div *ngFor="let risk of risks">
+        <mat-label>{{risk.name}}</mat-label>
+        <mat-select>
+            <mat-option>Access</mat-option>
+            <mat-option>Modication</mat-option>
+            <mat-option>Deletion</mat-option>
+        </mat-select><br/>
+        <button (click)="add()" mat-button>Add row</button>
+    </div>
+    -->
+
+
