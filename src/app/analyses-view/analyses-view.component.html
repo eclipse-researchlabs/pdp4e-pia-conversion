@@ -1,6 +1,6 @@
 <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="3" rowHeight="350px">
+  <mat-grid-list cols="3">
     <mat-grid-tile *ngFor="let card of cards">
       <mat-card class="dashboard-card">
         <mat-card-header>
@@ -10,7 +10,25 @@
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
           <button mat-button (click)="openNewPiaDialog(card)">Export to new PIA</button>
-          <button mat-button (click)="openAssignment(card)">Export to PIA</button>
+          <table mdbTable>
+            <thead>
+              <tr>
+                <th >PIA NAME </th>
+                <th >AUTHOR</th>
+                <th >EVALUATOR </th>
+                <th >VALIDATOR </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr mdbTableCol *ngFor="let pia of pias">
+                <th>{{pia.name}}</th>
+                <th>{{pia.author_name}}</th>
+                <th>{{pia.evaluator_name}}</th>
+                <th>{{pia.validator_name}}</th>
+                <th><button mat-button (click)="openAssignment(card)">Export to this PIA</button></th>
+              </tr>
+            </tbody>
+          </table>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

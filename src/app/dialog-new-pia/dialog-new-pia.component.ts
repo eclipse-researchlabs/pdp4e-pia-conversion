@@ -2,6 +2,8 @@ import { Component,Input,Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { HttpClient } from '@angular/common/http';
+import {PiaService} from '../services/pia.service'
 export interface answer {
   pia_id : any;
   reference_to : number;
@@ -21,17 +23,19 @@ export class DialogNewPiaComponent implements OnInit {
   secondFormGroup: FormGroup;
   answer_impact_acces : answer;
   answer_impact_modification : answer;
+  listData : any;
   answer_impact_deletion : answer;
   answers = [];
   measures = [];
   matrix_risk: number[][] = [[1,2,3],[1,2,2],[1,1,1]];
   constructor(private _formBuilder: FormBuilder,
+    private http: HttpClient,
+    private PiaService: PiaService,
     public dialogRef: MatDialogRef<DialogNewPiaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.data = this.data.data;
-    console.log(this.data);
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl1: ['', Validators.required],
       firstCtrl2: ['', Validators.required],
@@ -45,7 +49,7 @@ export class DialogNewPiaComponent implements OnInit {
   close() {
     this.dialogRef.close({ event: 'close'});
   }
-  //save PIA
+  //save PIA in file JSON
   save_pia(){
     if(this.firstFormGroup.value.firstCtrl1!="" &&this.firstFormGroup.value.firstCtrl2!="" && this.firstFormGroup.value.firstCtrl3 != "" && this.firstFormGroup.value.firstCtrl4  != "")
     {
@@ -74,7 +78,9 @@ export class DialogNewPiaComponent implements OnInit {
       "evaluations": [],
       "comments": []
     };
-      var sJson = JSON.stringify(myJson);
+    //this.PiaService.addPia(this.firstFormGroup.value.firstCtrl1,this.firstFormGroup.value.firstCtrl2, this.firstFormGroup.value.firstCtrl3, this.firstFormGroup.value.firstCtrl4  );
+    this.saveNewPia();
+    var sJson = JSON.stringify(myJson);
       var element = document.createElement('a');
       element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(sJson));
       element.setAttribute('download', "primer-server-task.json");
@@ -87,6 +93,7 @@ export class DialogNewPiaComponent implements OnInit {
 
   //Define the different fields of each category from list of all risks(filter by category)
   set_category(lists : any){
+    this.listData = lists;
     this.answers = [];
 
     /**
@@ -133,7 +140,6 @@ export class DialogNewPiaComponent implements OnInit {
     this.create_answers(this.getReference("access", "likelihood_level"), [] , this.get_max_level(lists[0][1])[1]);
     this.create_answers(this.getReference("modification", "likelihood_level"), [] , this.get_max_level(lists[1][1])[1]);
     this.create_answers(this.getReference("deletion", "likelihood_level"), [] , this.get_max_level(lists[2][1])[1]);
-    console.log(this.answers);
 
     this.measures = [];
     //create a measures part
@@ -143,7 +149,7 @@ export class DialogNewPiaComponent implements OnInit {
 
   }
 
-  /* create an answer from reference of question, list of treatment, gauge*/
+  /* create an answer (for the file JSON "IMPORT") from reference of question, list of treatment, gauge*/
 
   create_answers( reference, list_impact , gauge){
     var answer_impact_acces = {
@@ -263,7 +269,7 @@ export class DialogNewPiaComponent implements OnInit {
     return new_list;
   }
 
-  /* create a list of measures (json) from list of measures */
+  /* create a list of measures (for file JSON "IMPORT") from list of measures */
   create_mesures(list_measures : Array<string>){
     var i =0;
     if(list_measures != []){
@@ -280,4 +286,190 @@ export class DialogNewPiaComponent implements OnInit {
       console.log(this.measures);
     }
   }
+
+   /**
+   * Create a new PIA to put it in the backend of the tool of CNIL
+   * @returns {Promise} - Return new Promise
+   */
+
+  async create_Pia() {
+    this.firstFormGroup.value.firstCtrl3, this.firstFormGroup.value.firstCtrl4
+    const data ={pia: {
+      name: this.firstFormGroup.value.firstCtrl1,
+      category: "",
+      author_name: this.firstFormGroup.value.firstCtrl2,
+      evaluator_name: this.firstFormGroup.value.firstCtrl3,
+      validator_name: this.firstFormGroup.value.firstCtrl4,
+      dpo_status: 0,
+      dpo_opinion: "undefined",
+      concerned_people_opinion: "undefined",
+      concerned_people_status: 0,
+      rejected_reason: "",
+      applied_adjustements: "",
+      created_at:  new Date(),
+      updated_at:  new Date(),
+      status: 0,
+      is_example: 0,
+      is_archive: 0,
+      dpos_names: "undefined",
+      people_names: "undefined",
+      concerned_people_searched_opinion: true,
+      concerned_people_searched_content: "undefined",
+      structure_id: "",
+      structure_name: "undefined",
+      structure_sector_name: "undefined",
+      structure_data: "\"\""
+    }};
+    const url = "http://localhost:3000/pias";
+    return new Promise((resolve, reject) => {
+      //add answers
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        mode: 'cors'
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then((result: any) => {
+          resolve(result.id);
+        })
+        .catch(error => {
+          console.error('Request failed', error);
+          reject();
+        });
+      });
+  }
+
+  /**
+   * Save an answer (impact, measure, ...) to put it in the backend of the tool of CNIL
+   * @param id_PIA
+   * @param reference
+   * @param list_data
+   * @param gauge
+   */
+
+  save_answer(id_PIA, reference, list_data, gauge ){
+    if(list_data != [])
+      {
+        const answer = {
+          answer : {
+            pia_id : id_PIA,
+            reference_to : reference,
+            data : {
+              text :"",
+              gauge : gauge,
+              list : list_data
+            },
+            created_at : new Date(),
+          },
+          pia_id : id_PIA
+        };
+        const url = "http://localhost:3000/pias/"+ id_PIA + "/answers";
+        this.send_requet(url, answer);
+      };
+
+  }
+
+  /**
+   * Save a measure to put it in the backend of the tool of CNIL
+   * from the id of PIA and measure(string)
+   */
+
+  save_measure(id_PIA, measure){
+    const mesure = {
+      "measure": {
+        pia_id : id_PIA,
+        title : measure,
+        content : "",
+        placeholder : "measures.default_placeholder",
+        created_at : new Date(),
+        updated_at : new Date()
+      },
+      pia_id : id_PIA
+    };
+    const url = "http://localhost:3000/pias/"+ id_PIA + "/measures";
+    this.send_requet(url, mesure);
+  }
+
+  /**
+   * Send a request (add answer or add measure) to the backend of the tool of CNIL
+   * from URL of the backend and the data
+   */
+
+send_requet(url, data){
+  return new Promise((resolve, reject) => {
+    //add answers
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      mode: 'cors'
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then((result: any) => {
+        resolve(result.id);
+      })
+      .catch(error => {
+        console.error('Request failed', error);
+        reject();
+      });
+    });
+}
+
+/**
+ * Save a new PIA in the backend of the tool of CNIL
+ */
+
+  async saveNewPia() {
+    return new Promise((resolve, reject) => {
+      console.log(this.listData);
+
+      this.create_Pia().then(id => {
+        const id_pia = id;
+        if(this.listData != undefined){
+        //impact
+      this.save_answer(id_pia, this.getReference("access", "impact") , this.get_impact(this.listData[0][1]), null );
+      this.save_answer(id_pia, this.getReference("modification", "impact"), this.get_impact(this.listData[1][1]), null);
+      this.save_answer(id_pia, this.getReference("deletion", "impact"), this.get_impact(this.listData[2][1]), null);
+      //measures
+      this.save_answer(id_pia, this.getReference("access", "measure"), this.get_list_treatment(this.listData[0][1]), null);
+      this.save_answer(id_pia, this.getReference("modification", "measure"), this.get_list_treatment(this.listData[1][1]), null);
+      this.save_answer(id_pia, this.getReference("deletion", "measure"), this.get_list_treatment(this.listData[2][1]), null);
+      //sources
+      this.save_answer(id_pia,this.getReference("access", "source"), this.get_list_vulnerabilities(this.listData[0][1]), null);
+      this.save_answer(id_pia,this.getReference("modification", "source"), this.get_list_vulnerabilities(this.listData[1][1]), null);
+      this.save_answer(id_pia, this.getReference("deletion", "source"), this.get_list_vulnerabilities(this.listData[2][1]), null);
+      //gravite
+      this.save_answer(id_pia, this.getReference("access", "impact_level"), [] , this.get_max_level(this.listData[0][1])[0]);
+      this.save_answer(id_pia, this.getReference("modification", "impact_level"), [] , this.get_max_level(this.listData[1][1])[0]);
+      this.save_answer(id_pia, this.getReference("deletion", "impact_level"), [] , this.get_max_level(this.listData[2][1])[0]);
+
+      //vraisemblance
+      this.save_answer(id_pia, this.getReference("access", "likelihood_level"), [] , this.get_max_level(this.listData[0][1])[1]);
+      this.save_answer(id_pia, this.getReference("modification", "likelihood_level"), [] , this.get_max_level(this.listData[1][1])[1]);
+      this.save_answer(id_pia, this.getReference("deletion", "likelihood_level"), [] , this.get_max_level(this.listData[2][1])[1]);
+      this.get_list_treatment(this.listData[0][1]).forEach(element => {
+        this.save_measure(id_pia, element );
+      });
+      this.get_list_treatment(this.listData[1][1]).forEach(element => {
+        this.save_measure(id_pia, element );
+      });
+      this.get_list_treatment(this.listData[1][1]).forEach(element => {
+        this.save_measure(id_pia, element );
+      });
+    }
+        resolve(id);
+      });
+    });
+
+  }
+
 }

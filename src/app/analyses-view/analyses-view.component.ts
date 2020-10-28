@@ -7,7 +7,7 @@ import { RmtService } from '../services/rmt.service';
 import { RiskAssignmentComponent } from '../risk-assignment/risk-assignment.component';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import {DialogNewPiaComponent} from '../dialog-new-pia/dialog-new-pia.component'
-
+import { HttpClient } from '@angular/common/http';
 export interface PiaData {
   pia: string,
   author: string,
@@ -26,14 +26,19 @@ export class AnalysesViewComponent {
   data = require('../../assets/data/data_pdp4e.json');
   cards ;
   i =0;
+  pias : any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
+    private http: HttpClient,
     private pia: PiaService,
     private rmt: RmtService
   ) {
     this.cards = this.data.containers;
+    this.http.get('http://localhost:3000/pias').subscribe(data => {
+            this.pias = data;
+        })
   }
 
   openNewPiaDialog(card)
