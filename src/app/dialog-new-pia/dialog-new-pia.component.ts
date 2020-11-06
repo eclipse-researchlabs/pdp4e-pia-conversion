@@ -83,7 +83,9 @@ export class DialogNewPiaComponent implements OnInit {
       "comments": []
     };
     //this.PiaService.addPia(this.firstFormGroup.value.firstCtrl1,this.firstFormGroup.value.firstCtrl2, this.firstFormGroup.value.firstCtrl3, this.firstFormGroup.value.firstCtrl4  );
+    if(localStorage.getItem('server_url') != ""){
     this.saveNewPia();
+    }
     var sJson = JSON.stringify(myJson);
       var element = document.createElement('a');
       element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(sJson));

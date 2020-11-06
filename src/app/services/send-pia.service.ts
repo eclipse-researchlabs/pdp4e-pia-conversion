@@ -69,7 +69,7 @@ send_requet(url, data){
       structure_sector_name: "undefined",
       structure_data: "\"\""
     }};
-    const url = "http://localhost:3000/pias";
+    const url = localStorage.getItem('server_url') +"/pias";
     return new Promise((resolve, reject) => {
       //add answers
       fetch(url, {
@@ -110,7 +110,7 @@ send_requet(url, data){
       },
       pia_id : id_PIA
     };
-    const url = "http://localhost:3000/pias/"+ id_PIA + "/measures";
+    const url = localStorage.getItem('server_url') +"/pias/"+ id_PIA + "/measures";
     this.send_requet(url, mesure);
   }
 
@@ -138,7 +138,7 @@ send_requet(url, data){
           },
           pia_id : id_PIA
         };
-        const url = "http://localhost:3000/pias/"+ id_PIA + "/answers";
+        const url =localStorage.getItem('server_url') +"/pias/"+ id_PIA + "/answers";
         this.send_requet(url, answer);
       };
 

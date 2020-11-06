@@ -117,7 +117,9 @@ export class ShowRiskDataComponent implements OnInit {
         likelihood : risk.payload.likelihood,
         impact : risk.payload.impact
       }
-      this.ELEMENT_DATA.push(test);
+
+        this.ELEMENT_DATA.push(test);
+
     });
     console.log(this.ELEMENT_DATA);
   }
