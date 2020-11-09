@@ -180,6 +180,7 @@ get_max_level(list)
 { var max_level = 0;
   var riskMaxLevels = [0,0];
   list.forEach(risk => {
+    console.log(risk , this.getLevel_code(risk.impact)-1, this.getLevel_code(risk.likelihood)-1 );
     var risk_level = this.matrix_risk[this.getLevel_code(risk.impact)-1][this.getLevel_code(risk.likelihood)-1];
     if(max_level < risk_level){
       max_level = risk_level;
@@ -195,9 +196,11 @@ get_list_treatment(list){
   //to do get list all treatments
   var new_list = [];
   list.forEach(risk => {
+    if(risk.treatments != undefined){
     risk.treatments.forEach(treatment => {
       new_list.push(treatment);
     });
+  }
   });
   return new_list;
 }
@@ -219,40 +222,188 @@ get_list_vulnerabilities(list){
 async save_changes(){
     return new Promise((resolve, reject) => {
         if(this.listData != undefined){
-        //impact
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("access", "impact") , this.get_impact(this.listData[0][1]), null );
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("modification", "impact"), this.get_impact(this.listData[1][1]), null);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("deletion", "impact"), this.get_impact(this.listData[2][1]), null);
-      //measures
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("access", "measure"), this.get_list_treatment(this.listData[0][1]), null);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("modification", "measure"), this.get_list_treatment(this.listData[1][1]), null);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("deletion", "measure"), this.get_list_treatment(this.listData[2][1]), null);
-      //sources
-      this.sendPiaService.save_answer(this.pia_id,this.getReference("access", "source"), this.get_list_vulnerabilities(this.listData[0][1]), null);
-      this.sendPiaService.save_answer(this.pia_id,this.getReference("modification", "source"), this.get_list_vulnerabilities(this.listData[1][1]), null);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("deletion", "source"), this.get_list_vulnerabilities(this.listData[2][1]), null);
-      //gravite
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("access", "impact_level"), [] , this.get_max_level(this.listData[0][1])[0]);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("modification", "impact_level"), [] , this.get_max_level(this.listData[1][1])[0]);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("deletion", "impact_level"), [] , this.get_max_level(this.listData[2][1])[0]);
+      this.http.get(localStorage.getItem('server_url') + "/pias/" + this.pia_id + "/answers").subscribe(data => {
+        //IMPACT
+        var answer_321;
+        var answer_331;
+        var answer_341;
+        //MENACE
+        var answer_322;
+        var answer_332;
+        var answer_342;
+        //SOURCE
+        var answer_323;
+        var answer_333;
+        var answer_343;
+        //mesures
+        var answer_324;
+        var answer_334;
+        var answer_344;
+        //gravite
+        var answer_325;
+        var answer_335;
+        var answer_345;
+        //vraisemblance
+        var answer_326;
+        var answer_336;
+        var answer_346;
+        for(let key in data){
+          switch (data[key].reference_to){
+            case "321" :
+              answer_321 = data[key];
+              break;
+            case "331" :
+              answer_331 = data[key];
+              break;
+            case "341" :
+              answer_341 = data[key];
+              break;
 
-      //vraisemblance
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("access", "likelihood_level"), [] , this.get_max_level(this.listData[0][1])[1]);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("modification", "likelihood_level"), [] , this.get_max_level(this.listData[1][1])[1]);
-      this.sendPiaService.save_answer(this.pia_id, this.getReference("deletion", "likelihood_level"), [] , this.get_max_level(this.listData[2][1])[1]);
+              case "322" :
+                answer_322 = data[key];
+                break;
+              case "332" :
+                answer_332 = data[key];
+                break;
+              case "342" :
+                answer_342 = data[key];
+                break;
+
+                case "323" :
+                  answer_323 = data[key];
+                  break;
+                case "333" :
+                  answer_333 = data[key];
+                  break;
+                case "343" :
+                  answer_343 = data[key];
+                  break;
+
+                  case "324" :
+                    answer_324 = data[key];
+                    break;
+                  case "334" :
+                    answer_334 = data[key];
+                    break;
+                  case "344" :
+                    answer_344 = data[key];
+                    break;
+
+                    case "325" :
+                      answer_325 = data[key];
+                      break;
+                    case "335" :
+                      answer_335 = data[key];
+                      break;
+                    case "345" :
+                      answer_345 = data[key];
+                      break;
+
+                      case "326" :
+                        answer_326 = data[key];
+                        break;
+                      case "336" :
+                        answer_336 = data[key];
+                        break;
+                      case "346" :
+                        answer_346 = data[key];
+                        break;
+          }
+        }
+        if(this.listData[0][1].length != 0){
+          this.send_all_answers(this.pia_id, "access",answer_321,answer_324,answer_323, answer_325, answer_326, this.listData[0][1] );
+        }
+        if(this.listData[1][1].length != 0){
+          this.send_all_answers(this.pia_id, "modification",answer_331,answer_334,answer_333, answer_335, answer_336, this.listData[1][1] );
+        }
+        if(this.listData[2][1].length != 0){
+          this.send_all_answers(this.pia_id, "deletion",answer_341,answer_344,answer_343, answer_335, answer_336, this.listData[2][1] );
+        }
       this.get_list_treatment(this.listData[0][1]).forEach(element => {
-        this.sendPiaService.save_measure(this.pia_id, element );
+        //this.sendPiaService.save_measure(this.pia_id, element );
       });
       this.get_list_treatment(this.listData[1][1]).forEach(element => {
-        this.sendPiaService.save_measure(this.pia_id, element );
+        //this.sendPiaService.save_measure(this.pia_id, element );
       });
       this.get_list_treatment(this.listData[1][1]).forEach(element => {
-        this.sendPiaService.save_measure(this.pia_id, element );
+        //this.sendPiaService.save_measure(this.pia_id, element );
       });
-    }
-
+    });
+  }
     });
 
+  }
+
+  send_all_answers(pia_id, type ,answer_impact, answer_measures, answer_sources, answer_impact_level, answer_likelihood_level, listData)
+  {
+    if(answer_impact == undefined){
+      this.sendPiaService.save_answer(this.pia_id, this.getReference(type, "impact") , this.get_impact(listData), null );
+    }
+    else {
+      if(answer_impact.data.list != undefined){
+        this.sendPiaService.update_answer(this.pia_id, this.getReference(type, "impact"),  (answer_impact.data.list).concat(this.get_impact(listData)), null, answer_impact.id );
+      }else{
+        this.sendPiaService.update_answer(this.pia_id, this.getReference(type, "impact"),  this.get_impact(listData), null, answer_impact.id );
+      }
+
+    }
+
+    if(answer_sources == undefined){
+      this.sendPiaService.save_answer(this.pia_id, this.getReference(type, "source"), this.get_list_vulnerabilities(listData), null);
+    }
+    else {
+
+      if(answer_sources.data.list != undefined){
+        this.sendPiaService.update_answer(this.pia_id,this.getReference(type, "source"), (answer_sources.data.list).concat(this.get_list_vulnerabilities(listData)), null , answer_sources.id);
+      }else{
+        this.sendPiaService.update_answer(this.pia_id,this.getReference(type, "source"), this.get_list_vulnerabilities(listData), null , answer_sources.id);
+      }
+
+    }
+
+    if(answer_measures == undefined){
+      this.sendPiaService.save_answer(this.pia_id, this.getReference(type, "measure"), this.get_list_treatment(listData), null);
+    }
+    else {
+
+      if(answer_measures.data.list != undefined){
+        this.sendPiaService.update_answer(this.pia_id, this.getReference(type, "measure"), (answer_measures.data.list).concat(this.get_list_treatment(listData)), null, answer_measures.id);
+      }else{
+        this.sendPiaService.update_answer(this.pia_id, this.getReference(type, "measure"), this.get_list_treatment(listData), null, answer_measures.id);
+      }
+
+
+    }
+
+    if(answer_impact_level == undefined){
+      this.sendPiaService.save_answer(this.pia_id, this.getReference(type, "impact_level"), [] , this.get_max_level(listData)[0]);
+    }
+    else {
+      this.sendPiaService.update_answer(this.pia_id, this.getReference(type, "impact_level"), [] , this.get_max_level(listData)[0], answer_impact_level.id);
+    }
+
+    if(answer_likelihood_level == undefined){
+      this.sendPiaService.save_answer(this.pia_id, this.getReference(type, "likelihood_level"), [] , this.get_max_level(listData)[1]);
+    }
+    else {
+      this.sendPiaService.update_answer(this.pia_id, this.getReference(type, "likelihood_level"), [] , this.get_max_level(listData)[1], answer_likelihood_level.id);
+    }
+    this.http.get(localStorage.getItem('server_url') + "/pias/" + this.pia_id + "/measures").subscribe(data => {
+      var tab_measures = this.get_list_measures(data);
+    this.get_list_treatment(listData).forEach(element => {
+      //this.sendPiaService.save_measure(this.pia_id, element );
+      if(tab_measures.includes(element) == false){
+        this.sendPiaService.save_measure(this.pia_id, element );
+      }
+    });
+  });
+  }
+  get_list_measures(list){
+    var tab_measures = [];
+    list.forEach(element => {
+      tab_measures.push(element.title);
+    });
+    return tab_measures;
   }
   }
 

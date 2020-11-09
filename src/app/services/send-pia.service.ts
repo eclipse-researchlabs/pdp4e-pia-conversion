@@ -143,4 +143,51 @@ send_requet(url, data){
       };
 
   }
+  update_answer(id_PIA, reference, list_data, gauge, id_answer ){
+    console.log(id_PIA, reference, list_data, gauge, id_answer );
+    if(list_data != [])
+      {
+        const answer = {
+          answer : {
+            pia_id : id_PIA,
+            reference_to : reference,
+            data : {
+              text :"",
+              gauge : gauge,
+              list : list_data
+            },
+            updated_at : new Date(),
+          },
+          pia_id : id_PIA
+        };
+        const url =localStorage.getItem('server_url') +"/pias/"+ id_PIA + "/answers/"+id_answer;
+        this.update_requet(url, answer);
+      };
+
+  }
+
+  update_requet(url, data){
+    return new Promise((resolve, reject) => {
+      //add answers
+      fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        mode: 'cors'
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then((result: any) => {
+          resolve(result.id);
+        })
+        .catch(error => {
+          console.error('Request failed', error);
+          reject();
+        });
+      });
+  }
+
 }

@@ -269,6 +269,17 @@ export class DialogNewPiaComponent implements OnInit {
       this.sendPiaService.create_Pia(this.firstFormGroup.value.firstCtrl1, this.firstFormGroup.value.firstCtrl2, this.firstFormGroup.value.firstCtrl3, this.firstFormGroup.value.firstCtrl4).then(id => {
         const id_pia = id;
         if(this.listData != undefined){
+
+          if(this.listData[0][1].length != 0){
+            this.send_all_answers(id_pia, "access", this.listData[0][1] );
+          }
+          if(this.listData[1][1].length != 0){
+            this.send_all_answers(id_pia, "modification", this.listData[1][1] );
+          }
+          if(this.listData[2][1].length != 0){
+            this.send_all_answers(id_pia, "deletion", this.listData[2][1] );
+          }
+          /*
         //impact
       this.sendPiaService.save_answer(id_pia, this.getReference("access", "impact") , this.get_impact(this.listData[0][1]), null );
       this.sendPiaService.save_answer(id_pia, this.getReference("modification", "impact"), this.get_impact(this.listData[1][1]), null);
@@ -299,11 +310,34 @@ export class DialogNewPiaComponent implements OnInit {
       this.get_list_treatment(this.listData[1][1]).forEach(element => {
         this.sendPiaService.save_measure(id_pia, element );
       });
+      */
     }
         resolve(id);
+        this.close();
       });
     });
 
   }
 
+  /**
+  * Send all answers in the backend of the tool of CNIL from pia_id, the type of the risk and data
+  */
+  send_all_answers (pia_id, type , listData){
+
+     //impact
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "impact") , this.get_impact(listData), null );
+    //measures
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "measure"), this.get_list_treatment(listData), null);
+    //sources
+    this.sendPiaService.save_answer(pia_id,this.getReference(type, "source"), this.get_list_vulnerabilities(listData), null);
+    //gravite
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "impact_level"), [] , this.get_max_level(listData)[0]);
+    //vraisemblance
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "likelihood_level"), [] , this.get_max_level(listData)[1]);
+
+    this.get_list_treatment(listData).forEach(element => {
+      this.sendPiaService.save_measure(pia_id, element );
+    });
+
+  }
 }

@@ -67,6 +67,11 @@ export class AnalysesViewComponent {
     dialogConfig.data = { data:card };
    const dialogRef =  this.dialog.open(DialogNewPiaComponent,dialogConfig);
    dialogRef.afterClosed().subscribe(result => r => {
+    if(localStorage.getItem('server_url') != ""){
+      this.http.get(localStorage.getItem('server_url') + "/pias").subscribe(data => {
+        this.pias = data;
+    })
+     }
      console.log(r);
      if(r)
      {
@@ -92,6 +97,7 @@ export class AnalysesViewComponent {
         if(data[key].reference_to == "321" || data[key].reference_to == "331"  || data[key].reference_to == "341" )
        {
          var riskadd ;
+         if(data[key].data.list != undefined){
          data[key].data.list.forEach(element => {
              if(element == risk.name) {
               ok = false;
@@ -100,6 +106,7 @@ export class AnalysesViewComponent {
                riskadd = risk;
              }
            });
+          }
        }
        }
        if(ok){
