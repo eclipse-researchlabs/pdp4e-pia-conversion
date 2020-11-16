@@ -27,6 +27,7 @@ export class DialogNewPiaComponent implements OnInit {
   answer_impact_modification : answer;
   listData : any;
   answer_impact_deletion : answer;
+  addNew = "addNew";
   //answers = [];
   //measures = [];
   matrix_risk: number[][] = [[1,2,3],[1,2,2],[1,1,1]];
@@ -279,38 +280,6 @@ export class DialogNewPiaComponent implements OnInit {
           if(this.listData[2][1].length != 0){
             this.send_all_answers(id_pia, "deletion", this.listData[2][1] );
           }
-          /*
-        //impact
-      this.sendPiaService.save_answer(id_pia, this.getReference("access", "impact") , this.get_impact(this.listData[0][1]), null );
-      this.sendPiaService.save_answer(id_pia, this.getReference("modification", "impact"), this.get_impact(this.listData[1][1]), null);
-      this.sendPiaService.save_answer(id_pia, this.getReference("deletion", "impact"), this.get_impact(this.listData[2][1]), null);
-      //measures
-      this.sendPiaService.save_answer(id_pia, this.getReference("access", "measure"), this.get_list_treatment(this.listData[0][1]), null);
-      this.sendPiaService.save_answer(id_pia, this.getReference("modification", "measure"), this.get_list_treatment(this.listData[1][1]), null);
-      this.sendPiaService.save_answer(id_pia, this.getReference("deletion", "measure"), this.get_list_treatment(this.listData[2][1]), null);
-      //sources
-      this.sendPiaService.save_answer(id_pia,this.getReference("access", "source"), this.get_list_vulnerabilities(this.listData[0][1]), null);
-      this.sendPiaService.save_answer(id_pia,this.getReference("modification", "source"), this.get_list_vulnerabilities(this.listData[1][1]), null);
-      this.sendPiaService.save_answer(id_pia, this.getReference("deletion", "source"), this.get_list_vulnerabilities(this.listData[2][1]), null);
-      //gravite
-      this.sendPiaService.save_answer(id_pia, this.getReference("access", "impact_level"), [] , this.get_max_level(this.listData[0][1])[0]);
-      this.sendPiaService.save_answer(id_pia, this.getReference("modification", "impact_level"), [] , this.get_max_level(this.listData[1][1])[0]);
-      this.sendPiaService.save_answer(id_pia, this.getReference("deletion", "impact_level"), [] , this.get_max_level(this.listData[2][1])[0]);
-
-      //vraisemblance
-      this.sendPiaService.save_answer(id_pia, this.getReference("access", "likelihood_level"), [] , this.get_max_level(this.listData[0][1])[1]);
-      this.sendPiaService.save_answer(id_pia, this.getReference("modification", "likelihood_level"), [] , this.get_max_level(this.listData[1][1])[1]);
-      this.sendPiaService.save_answer(id_pia, this.getReference("deletion", "likelihood_level"), [] , this.get_max_level(this.listData[2][1])[1]);
-      this.get_list_treatment(this.listData[0][1]).forEach(element => {
-        this.sendPiaService.save_measure(id_pia, element );
-      });
-      this.get_list_treatment(this.listData[1][1]).forEach(element => {
-        this.sendPiaService.save_measure(id_pia, element );
-      });
-      this.get_list_treatment(this.listData[1][1]).forEach(element => {
-        this.sendPiaService.save_measure(id_pia, element );
-      });
-      */
     }
         resolve(id);
         this.close();

@@ -9,6 +9,8 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import {DialogNewPiaComponent} from '../dialog-new-pia/dialog-new-pia.component'
 import { HttpClient } from '@angular/common/http';
 import {MatTableDataSource} from '@angular/material/table';
+import {SendPiaService} from '../services/send-pia.service';
+import { DOCUMENT } from '@angular/common';
 export interface PiaData {
   pia: string,
   author: string,
@@ -50,7 +52,9 @@ export class AnalysesViewComponent {
    }
   }
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private breakpointObserver: BreakpointObserver,
+    private sendPiaService : SendPiaService,
     private dialog: MatDialog,
     private http: HttpClient,
     private pia: PiaService,
@@ -66,7 +70,7 @@ export class AnalysesViewComponent {
     dialogConfig.width = "100%";
     dialogConfig.data = { data:card };
    const dialogRef =  this.dialog.open(DialogNewPiaComponent,dialogConfig);
-   dialogRef.afterClosed().subscribe(result => r => {
+   dialogRef.afterClosed().subscribe(r => {
     if(localStorage.getItem('server_url') != ""){
       this.http.get(localStorage.getItem('server_url') + "/pias").subscribe(data => {
         this.pias = data;
@@ -81,42 +85,85 @@ export class AnalysesViewComponent {
    }
  );
   }
+  deletePia(pia_id){
+    const url = localStorage.getItem('server_url') +"/pias/"+ pia_id ;
+    this.sendPiaService.delete(url);
+    this.document.location.reload();
+  }
 
   openAssignment(card, pia_id){
     console.log(card, pia_id);
     card =JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
     var dataCard = JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
+    var dataCard_exist = JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
     //var dataCard = card;
     this.http.get(localStorage.getItem('server_url') + "/pias/" + pia_id + "/answers").subscribe(data => {
       var i = 0;
       var risktab = [];
+      var risktab_exist = [];
+      console.log(data);
       dataCard.assets[0].risks.forEach(risk => {
-       var ok = true;
+        risk.description = undefined;
+        var ok = true;
        if(data != []){
        for(let key in data){
         if(data[key].reference_to == "321" || data[key].reference_to == "331"  || data[key].reference_to == "341" )
        {
          var riskadd ;
+         var riskexist;
          if(data[key].data.list != undefined){
          data[key].data.list.forEach(element => {
              if(element == risk.name) {
               ok = false;
+
+              if(data[key].reference_to == "321"){
+
+                risk.description = "access";
+              }
+              else if (data[key].reference_to == "331"){
+
+                risk.description = "modification";
+              }
+              else {
+                risk.description = "deletion";
+              }
+              riskexist = risk;
+
              }
              else {
+
                riskadd = risk;
              }
+
            });
+           if(ok)
+             {
+              risk.description = undefined;
+             }
           }
        }
        }
-       if(ok){
+       risktab.push(risk);
+       console.log(risktab);
+       risktab_exist.push(risk);
+       /**
+        *
+        *
+      if(ok){
          risktab.push(risk);
+
        }
+       else {
+        risktab_exist.push(risk);
+       }
+        */
+
      }
      else{
        risktab.push(risk);
      }
      dataCard.assets[0].risks = risktab;
+     dataCard_exist.assets[0].risks = risktab_exist;
      console.log(dataCard);
 
 
@@ -125,7 +172,7 @@ const dialogConfig = new MatDialogConfig();
 //dialogConfig.disableClose = true;
 dialogConfig.autoFocus = true;
 dialogConfig.width = "100%";
-dialogConfig.data = { data:dataCard, piaId : pia_id};
+dialogConfig.data = { data:dataCard, data_stocked : dataCard_exist, piaId : pia_id};
 const dialogRef =  this.dialog.open(RiskAssignmentComponent,dialogConfig);
 dialogRef.afterClosed().subscribe(result => r => {
  console.log(r);

@@ -8,6 +8,10 @@
 </div>
 <mat-dialog-content class="mat-typography">
       <app-show-risk-data  (lists_Event)="set_category($event)" [data_risk] = "dataShow"></app-show-risk-data>
+      <!--
+ <app-show-risk-data   [data_risk] = "dataShow_stocked"></app-show-risk-data>
+      -->
+
 </mat-dialog-content>
 <mat-dialog-actions align="end" >
   <button  mat-button cdkFocusInitial mat-dialog-close mat-raised-button color="primary" (click)="save_changes()" >ok</button>

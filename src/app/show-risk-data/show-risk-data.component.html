@@ -22,25 +22,25 @@
   <!-- name_risk Column -->
   <ng-container matColumnDef="risk_name">
     <th mat-header-cell *matHeaderCellDef> RISK NAME </th>
-    <td mat-cell *matCellDef="let element"> {{element.name_risk}} </td>
+    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)"> {{element.name_risk}} </td>
   </ng-container>
 
   <!-- asset Column -->
   <ng-container matColumnDef="asset_name">
     <th mat-header-cell *matHeaderCellDef> ASSET NAME</th>
-    <td mat-cell *matCellDef="let element"> {{element.asset}} </td>
+    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)"> {{element.asset}} </td>
   </ng-container>
 
   <!-- lindun Column -->
   <ng-container matColumnDef="linddun">
     <th mat-header-cell *matHeaderCellDef> linddun </th>
-    <td mat-cell *matCellDef="let element"> {{element.lindun}} </td>
+    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)"> {{element.lindun}} </td>
   </ng-container>
 
   <!-- stride Column -->
   <ng-container matColumnDef="stride">
     <th mat-header-cell *matHeaderCellDef> &nbsp;  STRIDE  &nbsp; </th>
-    <td mat-cell *matCellDef="let element">
+    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)">
       <div *ngIf="element.stride === '' || element.stride == null">&nbsp; null &nbsp;</div>
       <div *ngIf="element.stride != ''"> {{element.stride}}</div>
     </td>
@@ -49,13 +49,14 @@
   <!-- category Column -->
   <ng-container matColumnDef="catagory">
     <th mat-header-cell *matHeaderCellDef scope="col"> CATEGORY  </th>
-    <td mat-cell *matCellDef="let element">
-      <mat-select panelClass="example-panel-dark-blue"
+    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)">
+      <mat-select  *ngIf="element.description == undefined" panelClass="example-panel-dark-blue"
       formControlName="company" (selectionChange)="setCategory($event.value, element)">
-        <mat-option *ngFor="let cust of ['Access','Modification','Deletion']"
+        <mat-option  *ngFor="let cust of ['Access','Modification','Deletion']"
         [value]="cust"> {{cust}}
       </mat-option>
     </mat-select>
+    <p  *ngIf="element.description != undefined ">{{element.description}}</p>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class SendPiaService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
 
   /**
@@ -178,6 +178,29 @@ send_requet(url, data){
         mode: 'cors'
       })
         .then(response => {
+          return response.json();
+        })
+        .then((result: any) => {
+          resolve(result.id);
+        })
+        .catch(error => {
+          console.error('Request failed', error);
+          reject();
+        });
+      });
+  }
+  delete(url){
+    return new Promise((resolve, reject) => {
+      //add answers
+      fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors'
+      })
+        .then(response => {
+
           return response.json();
         })
         .then((result: any) => {

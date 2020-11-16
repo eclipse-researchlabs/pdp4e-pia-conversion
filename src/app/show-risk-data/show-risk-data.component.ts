@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RmtService } from '../services/rmt.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
+import { reduce } from 'rxjs/operators';
 export interface PeriodicElement {
   position : number;
   id : any;
@@ -24,6 +25,8 @@ export interface PeriodicElement {
 })
 export class ShowRiskDataComponent implements OnInit {
   @Input() data_risk;
+  @Input() type = "";
+  addNew = "addNew";
   ELEMENT_DATA: PeriodicElement[] = [];
   risks=this.conversion.getPrivacyRisks(this.rmt.riskAnalyses[0]);
   risks_data ;
@@ -104,11 +107,17 @@ export class ShowRiskDataComponent implements OnInit {
     var i = 0;
     this.risks_data.forEach(risk => {
       console.log(risk);
+      var description;
+      if(this.type == "addNew")
+      {description == undefined;}
+      else {
+        description = risk.description;
+      }
       var test : PeriodicElement = {
         position : i++,
         id : risk.id,
         name_risk : risk.name,
-        description : risk.description,
+        description : description,
         asset : risk.asset.name,
         vulnerabilities : this.get_vulnerabilities(risk.vulnerabilities),
         treatments : this.get_treatments(risk.treatments),
@@ -117,6 +126,8 @@ export class ShowRiskDataComponent implements OnInit {
         likelihood : risk.payload.likelihood,
         impact : risk.payload.impact
       }
+      console.log(this.type);
+
 
         this.ELEMENT_DATA.push(test);
 
@@ -137,6 +148,11 @@ export class ShowRiskDataComponent implements OnInit {
       list_treatments.push(treatment.definition.name);
     });
     return list_treatments;
+  }
+  getbackgroundColor(element){
+    if(element.description != undefined){
+      return "#DCDCDC";
+    }
   }
 
 }

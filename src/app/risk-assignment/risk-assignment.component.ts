@@ -23,6 +23,7 @@ export interface PeriodicElement {
 export class RiskAssignmentComponent implements OnInit{
   dataShow;
   listData;
+  dataShow_stocked;
   matrix_risk: number[][] = [[1,2,3],[1,2,2],[1,1,1]];
   ELEMENT_DATA: PeriodicElement[] = [];
   risks=this.conversion.getPrivacyRisks(this.rmt.riskAnalyses[0]);
@@ -77,6 +78,7 @@ export class RiskAssignmentComponent implements OnInit{
     var risktab = [];
     this.pia_id = this.data.piaId;
     this.dataShow = this.data.data;
+    this.dataShow_stocked = this.data.data_stocked;
     var array = [];
     var i = 0;
     this.risks_data.forEach(risk => {
