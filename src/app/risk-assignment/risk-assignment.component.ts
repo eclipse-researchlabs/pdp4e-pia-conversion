@@ -402,10 +402,13 @@ async save_changes(){
   }
   get_list_measures(list){
     var tab_measures = [];
-    list.forEach(element => {
-      tab_measures.push(element.title);
-    });
+    if(list != undefined){
+      list.forEach(element => {
+        tab_measures.push(element.title);
+      });
+    }
     return tab_measures;
-  }
+    }
+
   }
 

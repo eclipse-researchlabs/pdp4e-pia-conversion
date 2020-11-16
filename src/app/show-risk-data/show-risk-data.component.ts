@@ -137,16 +137,20 @@ export class ShowRiskDataComponent implements OnInit {
 
   get_vulnerabilities(vulnerabilities){
     var list_vulnerabilities  = [];
-    vulnerabilities.forEach(vulnerabilitie => {
-      list_vulnerabilities.push(vulnerabilitie.name);
-    });
+    if (vulnerabilities != undefined){
+      vulnerabilities.forEach(vulnerabilitie => {
+        list_vulnerabilities.push(vulnerabilitie.name);
+      });
+    }
     return list_vulnerabilities;
   }
   get_treatments(treatments){
     var list_treatments  = [];
+    if (treatments != undefined){
     treatments.forEach(treatment => {
       list_treatments.push(treatment.definition.name);
     });
+  }
     return list_treatments;
   }
   getbackgroundColor(element){
