@@ -1,8 +1,11 @@
 import { Component, OnInit,Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {  HttpClient, HttpHeaders } from '@angular/common/http';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators'
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-modal-config',
   templateUrl: './modal-config.component.html',
@@ -18,6 +21,7 @@ export class ModalConfigComponent implements OnInit {
   showConnect = false;
   data_risk;
   constructor(
+    private http: HttpClient,
     public router: Router,
     private _formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<ModalConfigComponent>,
@@ -47,13 +51,16 @@ export class ModalConfigComponent implements OnInit {
     }
 
 }
+
+//save all information(url back-end of PIA, url and token of the server pdp4e) in the local storage
 save(){
-  console.log(this.data_risk);
-  localStorage.setItem('risks_Imported', this.data_risk);
+  localStorage.setItem('server_pdp4_url', this.firstFormGroup.value.firstCtrl1);
+  localStorage.setItem('server_pdp4_token', this.firstFormGroup.value.firstCtrl2);
   localStorage.setItem('server_url', this.secondFormGroup.value.secondCtrl);
-  this.close();
-  //this.router.navigate(['/analyses']);
+  this.getData(this.firstFormGroup.value.firstCtrl1, this.firstFormGroup.value.firstCtrl2 );
 }
+
+//update data (risks) from the file imported
   onChange(fileList: FileList) {
 
     let file = fileList[0];
@@ -65,14 +72,45 @@ save(){
     let self = this;
     fileReader.onloadend = function()  {
       fileContent = fileReader.result;
-      console.log(fileContent);
-      //localStorage.setItem('risks_Imported', fileContent);
       self.data_risk = fileContent;
 
     }
-    console.log(this.data_risk);
+
 
   }
+
+//get data (risks) from URL and token of the server of PDP4E
+  getData(url, token){
+    if(url !='' && token != ""){
+
+    const headers = {  'Content-type': 'application/json', 'token': token };
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-type': 'application/json',
+          'token': token
+      })
+      };
+
+    const headers1 = {'Content-type': 'application/json', 'token': token };
+    this.http.get(url,  { headers })
+      .pipe(map(r => { console.log(r);
+        var data = JSON.stringify(r);
+        localStorage.setItem('risks_Imported', data);
+        this.close();
+      }))
+      .subscribe(resp => {
+
+        console.log(resp);
+      });
+    }
+    else if (this.data_risk != undefined){
+      localStorage.setItem('risks_Imported', this.data_risk);
+      this.close();
+    }
+
+  }
+
+  //close the modal
   close() {
     this.dialogRef.close({ event: 'close'});
   }
