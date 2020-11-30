@@ -64,6 +64,7 @@ export class AnalysesViewComponent {
 
   openNewPiaDialog(card)
   {
+    var test = card;
     const dialogConfig = new MatDialogConfig();
     //dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -93,8 +94,8 @@ export class AnalysesViewComponent {
 
   openAssignment(card, pia_id){
     console.log(card, pia_id);
-    card =JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
-    var dataCard = JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
+    //card =JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
+    //var dataCard = JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
     var dataCard_exist = JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
     //var dataCard = card;
     this.http.get(localStorage.getItem('server_url') + "/pias/" + pia_id + "/answers").subscribe(data => {
@@ -102,7 +103,8 @@ export class AnalysesViewComponent {
       var risktab = [];
       var risktab_exist = [];
       console.log(data);
-      dataCard.assets[0].risks.forEach(risk => {
+      if(card.assets[0] != undefined){
+      card.assets[0].risks.forEach(risk => {
         risk.description = undefined;
         var ok = true;
        if(data != []){
@@ -162,17 +164,20 @@ export class AnalysesViewComponent {
      else{
        risktab.push(risk);
      }
-     dataCard.assets[0].risks = risktab;
+     card.assets[0].risks = risktab;
+     if(dataCard_exist.assets[0] != undefined){
      dataCard_exist.assets[0].risks = risktab_exist;
-     console.log(dataCard);
+     console.log(card);
+     }
 
 
 });
+    }
 const dialogConfig = new MatDialogConfig();
 //dialogConfig.disableClose = true;
 dialogConfig.autoFocus = true;
 dialogConfig.width = "100%";
-dialogConfig.data = { data:dataCard, data_stocked : dataCard_exist, piaId : pia_id};
+dialogConfig.data = { data:card, data_stocked : dataCard_exist, piaId : pia_id};
 const dialogRef =  this.dialog.open(RiskAssignmentComponent,dialogConfig);
 dialogRef.afterClosed().subscribe(result => r => {
  console.log(r);

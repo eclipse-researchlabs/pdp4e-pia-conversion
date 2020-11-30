@@ -9,6 +9,7 @@
 <div>
 
   <mat-horizontal-stepper #stepper>
+
     <mat-step [stepControl]="firstFormGroup" errorMessage="All fields are required.">
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>RISK MANAGEMENT</ng-template>
@@ -49,6 +50,9 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
+      <ngx-loading [show]="loading" [config]="{
+        backdropBackgroundColour: 'rgba(255,255,255,0.3)', backdropBorderRadius: '10px',
+        primaryColour: '#0080ff', secondaryColour: '#0080ff', tertiaryColour: '#0080ff' }" ></ngx-loading>
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>CONNECT TO THE TOOL OF CNIL (PIA)</ng-template>
         <div mat-dialog-content>

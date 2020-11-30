@@ -9,7 +9,7 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'risk-management-client';
+  title = 'RISK-MANAGEMENT-CLIENT';
   url_server = "";
   data_risk = undefined;
   path;

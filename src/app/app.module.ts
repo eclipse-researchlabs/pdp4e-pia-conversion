@@ -29,6 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowRiskDataComponent } from './show-risk-data/show-risk-data.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { ModalConfigComponent } from './modal-config/modal-config.component';
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +65,15 @@ import { ModalConfigComponent } from './modal-config/modal-config.component';
     ReactiveFormsModule,
     MatTabsModule,
     MatRadioModule,
-    MatChipsModule
+    MatChipsModule,
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.wanderingCubes,
+      backdropBackgroundColour: 'rgba(0,0,0,0.1)',
+      backdropBorderRadius: '4px',
+      primaryColour: '#ffffff',
+      secondaryColour: '#ffffff',
+      tertiaryColour: '#ffffff'
+  })
   ],
   entryComponents: [
     DialogNewPia
