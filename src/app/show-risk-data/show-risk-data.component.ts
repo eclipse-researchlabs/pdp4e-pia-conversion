@@ -28,7 +28,7 @@ export class ShowRiskDataComponent implements OnInit {
   @Input() type = "";
   addNew = "addNew";
   ELEMENT_DATA: PeriodicElement[] = [];
-  risks=this.conversion.getPrivacyRisks(this.rmt.riskAnalyses[0]);
+  //risks=this.conversion.getPrivacyRisks(this.rmt.riskAnalyses[0]);
   risks_data ;
   list_access = [];
   list_modification = [];

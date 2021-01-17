@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Console } from 'console';
 import { PiaService } from './pia.service';
 import { RmtService } from './rmt.service';
 
@@ -117,7 +118,12 @@ export class ConversionService {
   //Returns all risks related to privacy: ie with a valid LINDDUN category
   getPrivacyRisks(data: any): any[] {
     return data.assets.reduce((acc, asset) => {
-      let val=acc.concat(asset.risks.filter(risk => { return risk.payload.linddun != undefined; })
+      let val=acc.concat(asset.risks.filter(risk => {
+        console.log(risk.vulnerabilities);
+        return risk.vulnerabilities.some(v=>{
+          return JSON.parse(v.payload).Framework=="Linddun";
+        })
+      })
       //.map(risk => risk.asset = { id: asset.id, name: asset.name })
       );
       console.log(val);
@@ -157,7 +163,9 @@ export class ConversionService {
             likelihood : risk.payload.likelihood
           }
         }
-        if(risk.payload.lindun!= undefined){
+        if(risk.vulnerabilities.some(v=>{
+          return JSON.parse(v.payload).Framework=="Linddun";
+        })){
           console.log(riskData);
           data_risk.push(riskData);
         }
