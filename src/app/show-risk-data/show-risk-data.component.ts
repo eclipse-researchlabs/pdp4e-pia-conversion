@@ -28,8 +28,10 @@ export class ShowRiskDataComponent implements OnInit {
   @Input() type = "";
   addNew = "addNew";
   ELEMENT_DATA: PeriodicElement[] = [];
+  EDGE_ELEMENT_DATA: PeriodicElement[] = [];
   //risks=this.conversion.getPrivacyRisks(this.rmt.riskAnalyses[0]);
   risks_data ;
+  edges_risks_data ;
   list_access = [];
   list_modification = [];
   list_Deletion = [];
@@ -40,6 +42,15 @@ export class ShowRiskDataComponent implements OnInit {
   selection = new SelectionModel<PeriodicElement>(true, []);
    /** Whether the number of selected elements matches the total number of rows. */
    isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+  edgeDisplayedColumns: string[] = ['risk_name', 'asset_name', 'linddun', 'stride', 'catagory'];
+  edgeDataSource = new MatTableDataSource<PeriodicElement>(this.EDGE_ELEMENT_DATA);
+  edgeSelection = new SelectionModel<PeriodicElement>(true, []);
+   /** Whether the number of selected elements matches the total number of rows. */
+   edgeIsAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
@@ -103,17 +114,19 @@ export class ShowRiskDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.risks_data = this.conversion.getPrivacyRisks1(this.data_risk);
+    this.edges_risks_data = this.conversion.getPrivacyRisksEdges(this.data_risk);
     console.log(this.risks_data );
     var i = 0;
+    //Add data from nodes
     this.risks_data.forEach(risk => {
       console.log(risk);
-      var description;
+      let description;
       if(this.type == "addNew")
       {description == undefined;}
       else {
         description = risk.description;
       }
-      var test : PeriodicElement = {
+      let test : PeriodicElement = {
         position : i++,
         id : risk.id,
         name_risk : risk.name,
@@ -133,6 +146,35 @@ export class ShowRiskDataComponent implements OnInit {
 
     });
     console.log(this.ELEMENT_DATA);
+    //Add data from edges
+    this.edges_risks_data.forEach(risk => {
+      console.log(risk);
+      let description;
+      if(this.type == "addNew")
+      {description == undefined;}
+      else {
+        description = risk.description;
+      }
+      let test : PeriodicElement = {
+        position : i++,
+        id : risk.id,
+        name_risk : risk.name,
+        description : description,
+        asset : risk.asset.name,
+        vulnerabilities : this.get_vulnerabilities(risk.vulnerabilities),
+        treatments : this.get_treatments(risk.treatments),
+        lindun : risk.payload.lindun,
+        stride : risk.payload.stride,
+        likelihood : risk.payload.likelihood,
+        impact : risk.payload.impact
+      }
+      console.log(this.type);
+
+
+        this.EDGE_ELEMENT_DATA.push(test);
+
+    });
+    console.log(this.EDGE_ELEMENT_DATA);
   }
 
   get_vulnerabilities(vulnerabilities){

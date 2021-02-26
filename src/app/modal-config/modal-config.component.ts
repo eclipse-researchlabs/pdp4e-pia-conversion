@@ -119,7 +119,7 @@ setRisks_server(url, token){
       var i = 0;
       JSON.parse(data).containers.forEach(element => {
         i++;
-      var url_risk = url + "/api/graphql?query={containers(where:{path:%22RootId%22,comparison:%22equal%22,value:%22" + element.id + "%22}){name,assets{id,name,risks{vulnerabilities{id, payload},name, description,payload{impact, likelihood},treatments{id,payload,definition{id,type,description,createdDateTime}}}}}}";
+      var url_risk = url + "/api/graphql?query={containers(where:{path:%22RootId%22,comparison:%22equal%22,value:%22" + element.id + "%22}){name,assets{id,name,risks{vulnerabilities{id, payload},name, description,payload{impact, likelihood},treatments{id,payload,definition{id,type,description,createdDateTime}}}},,edges{id,risks{vulnerabilities{id,payload},name,description,payload{impact,likelihood}}}}}";
          this.http.get(url_risk,  { headers })
            .pipe(map(r => {
               console.log(r);

@@ -178,6 +178,43 @@ export class ConversionService {
     return data_risk;
   }
 
+  getPrivacyRisksEdges(data: any){
+    var data_risk = [];
+    data.edges.forEach(edge => {
+
+      edge.risks.forEach(risk => {
+        var riskData = {
+          id : risk.id,
+          name : risk.name,
+          description : risk.description,
+          edge : {
+            id : edge.id,
+            name : edge.name,
+          },
+          vulnerabilities : risk.vulnerabilities,
+          treatments : risk.treatments,
+          payload : {
+            stride : risk.payload.stride,
+            lindun : risk.payload.lindun,
+            impact : risk.payload.impact,
+            likelihood : risk.payload.likelihood
+          }
+        }
+        if(risk.vulnerabilities.some(v=>{
+          return JSON.parse(v.payload).Framework=="Linddun";
+        })){
+          console.log(riskData);
+          data_risk.push(riskData);
+        }
+
+      });
+
+
+
+    });
+    return data_risk;
+  }
+
   /* filter risks by stride */
   private getRiskByStride(data: any, stride: string) {
     return data.assets.reduce((acc, asset) => {
