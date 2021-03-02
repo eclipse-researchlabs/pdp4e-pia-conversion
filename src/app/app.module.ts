@@ -27,6 +27,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { DialogNewPiaComponent } from './dialog-new-pia/dialog-new-pia.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowRiskDataComponent } from './show-risk-data/show-risk-data.component';
+import { ShowRiskDataEdgeComponent } from './show-risk-data-edge/show-risk-data-edge.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { ModalConfigComponent } from './modal-config/modal-config.component';
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
@@ -39,6 +40,7 @@ import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
     RiskAssignmentComponent,
     DialogNewPiaComponent,
     ShowRiskDataComponent,
+    ShowRiskDataEdgeComponent,
     ModalConfigComponent
   ],
   imports: [
