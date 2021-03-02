@@ -98,7 +98,7 @@ export class AnalysesViewComponent {
   {
     this.loading=true;
     const headers = {  'Content-type': 'application/json', 'token': localStorage.getItem('server_pdp4_token') };
-    var url_risk = localStorage.getItem('server_pdp4_url') + "/api/graphql?query={containers(where:{path:%22RootId%22,comparison:%22equal%22,value:%22" + id + "%22}){name,assets{id,name,risks{vulnerabilities{id, payload},name, description,payload{impact, likelihood},treatments{id,payload,definition{id,type,description,createdDateTime}}}},,edges{id,fromId,toId,risks{vulnerabilities{id,payload},name,description,payload{impact,likelihood}}}}}";
+    var url_risk = localStorage.getItem('server_pdp4_url') + "/api/graphql?query={containers(where:{path:%22RootId%22,comparison:%22equal%22,value:%22" + id + "%22}){name,assets{id,name,risks{vulnerabilities{id, payload},name, description,payload{impact, likelihood},treatments{id,payload,definition{id,type,description,createdDateTime}}}},,edges{id,fromId,toId,payload,risks{vulnerabilities{id,payload},name,description,payload{impact,likelihood}}}}}";
     this.http.get(url_risk,  { headers })
     .subscribe(r => {
       console.log(r);
