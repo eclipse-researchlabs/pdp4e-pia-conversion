@@ -35,9 +35,9 @@ export class AnalysesViewComponent {
   pias : any;
   displayedColumns: string[] = ['PIA_name', 'AUTHOR', 'EVALUATOR', 'VALIDATOR', 'ACTION'];
   ngOnInit(): void {
-    console.log(localStorage.getItem('risks_Imported'));
-    if(localStorage.getItem('risks_Imported') !== undefined){
-      this.cards = JSON.parse(localStorage.getItem('risks_Imported')).containers;
+    console.log(localStorage.getItem('container_list'));
+    if(localStorage.getItem('container_list') !== undefined){
+      this.cards = JSON.parse(localStorage.getItem('container_list')).containers;
     }
     else {
       this.cards = this.data.containers;
@@ -65,12 +65,12 @@ export class AnalysesViewComponent {
 
   openNewPiaDialog(card)
   {
-    var test = card;
+    this.retrieveData(card.id, r=>{
     const dialogConfig = new MatDialogConfig();
     //dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "100%";
-    dialogConfig.data = { data:card };
+    dialogConfig.data = { data:r.containers[0] };
    const dialogRef =  this.dialog.open(DialogNewPiaComponent,dialogConfig);
    dialogRef.afterClosed().subscribe(r => {
     if(localStorage.getItem('server_url') != ""){
@@ -86,6 +86,7 @@ export class AnalysesViewComponent {
      }
    }
  );
+  })
   }
   deletePia(pia_id){
     const url = localStorage.getItem('server_url') +"/pias/"+ pia_id ;
@@ -93,8 +94,27 @@ export class AnalysesViewComponent {
     this.document.location.reload();
   }
 
+  retrieveData(id, callback)
+  {
+    this.loading=true;
+    const headers = {  'Content-type': 'application/json', 'token': localStorage.getItem('server_pdp4_token') };
+    var url_risk = localStorage.getItem('server_pdp4_url') + "/api/graphql?query={containers(where:{path:%22RootId%22,comparison:%22equal%22,value:%22" + id + "%22}){name,assets{id,name,risks{vulnerabilities{id, payload},name, description,payload{impact, likelihood},treatments{id,payload,definition{id,type,description,createdDateTime}}}},,edges{id,risks{vulnerabilities{id,payload},name,description,payload{impact,likelihood}}}}}";
+    this.http.get(url_risk,  { headers })
+    .subscribe(r => {
+      console.log(r);
+      let data = JSON.stringify(r);
+      let risks=JSON.parse(data);
+      console.log(risks);
+      this.loading=false;
+      callback(risks)
+    })
+    //  .subscribe(resp => {
+    //  });
+  }
+
   openAssignment(card, pia_id){
-    console.log(card, pia_id);
+    this.retrieveData(card.id, r=>{
+    console.log(r, pia_id);
     //card =JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
     //var dataCard = JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
     var dataCard_exist = JSON.parse(localStorage.getItem('risks_Imported')).containers[0];
@@ -190,6 +210,7 @@ dialogRef.afterClosed().subscribe(result => r => {
 }
 );
 });
+    });
   }
 }
 

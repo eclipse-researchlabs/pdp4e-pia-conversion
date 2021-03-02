@@ -142,6 +142,7 @@ export class ConversionService {
     },[]);
   }
   getPrivacyRisks1(data: any){
+    console.log(data);
     var data_risk = [];
     data.assets.forEach(asset => {
 

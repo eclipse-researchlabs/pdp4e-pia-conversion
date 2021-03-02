@@ -116,31 +116,33 @@ setRisks_server(url, token){
   this.http.get(url_containers,  { headers })
     .pipe(map(r => { console.log(r);
       var data = JSON.stringify(r);
-      var i = 0;
-      JSON.parse(data).containers.forEach(element => {
-        i++;
-      var url_risk = url + "/api/graphql?query={containers(where:{path:%22RootId%22,comparison:%22equal%22,value:%22" + element.id + "%22}){name,assets{id,name,risks{vulnerabilities{id, payload},name, description,payload{impact, likelihood},treatments{id,payload,definition{id,type,description,createdDateTime}}}},,edges{id,risks{vulnerabilities{id,payload},name,description,payload{impact,likelihood}}}}}";
-         this.http.get(url_risk,  { headers })
-           .pipe(map(r => {
-              console.log(r);
-             var data = JSON.stringify(r);
-             this.risks.push(JSON.parse(data).containers[0]);
-             console.log(this.risks);
-             if(this.risks.length == i )
-             {
-              var data_risks = {
-                "containers": this.risks};
-                var  dataRisks = JSON.stringify(data_risks);
-                localStorage.setItem('risks_Imported', dataRisks);
+      localStorage.setItem('container_list', data);
+      // var i = 0;
+      // JSON.parse(data).containers.forEach(element => {
+      //   i++;
+      // var url_risk = url + "/api/graphql?query={containers(where:{path:%22RootId%22,comparison:%22equal%22,value:%22" + element.id + "%22}){name,assets{id,name,risks{vulnerabilities{id, payload},name, description,payload{impact, likelihood},treatments{id,payload,definition{id,type,description,createdDateTime}}}},,edges{id,risks{vulnerabilities{id,payload},name,description,payload{impact,likelihood}}}}}";
+      //    this.http.get(url_risk,  { headers })
+      //      .pipe(map(r => {
+      //         console.log(r);
+      //        var data = JSON.stringify(r);
+      //        this.risks.push(JSON.parse(data).containers[0]);
+      //        console.log(this.risks);
+      //        if(this.risks.length == i )
+      //        {
+      //         var data_risks = {
+      //           "containers": this.risks};
+      //           var  dataRisks = JSON.stringify(data_risks);
+      //           localStorage.setItem('risks_Imported', dataRisks);
 
-                this.close();
-             }
+      //           this.close();
+      //        }
 
-           }))
-           .subscribe(resp => {
-           });
+      //      }))
+      //      .subscribe(resp => {
+      //      });
 
-      });
+      // });
+      this.close();
     }))
     .subscribe(resp => {
     });
