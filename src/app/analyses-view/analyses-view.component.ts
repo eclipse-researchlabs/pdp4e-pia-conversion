@@ -30,6 +30,7 @@ export class AnalysesViewComponent {
   cards ;
   @Input() server_url;
   @Input() data_risk;
+  loading=false;
   i =0;
   pias : any;
   displayedColumns: string[] = ['PIA_name', 'AUTHOR', 'EVALUATOR', 'VALIDATOR', 'ACTION'];
