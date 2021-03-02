@@ -10,7 +10,8 @@ export interface PeriodicElement {
   id : any;
   name_risk : string;
   description : string;
-  asset : string;
+  source_asset : string;
+  target_asset : string;
   vulnerabilities : Array<string>;
   treatments : Array<string>;
   lindun : string;
@@ -36,7 +37,7 @@ export class ShowRiskDataEdgeComponent implements OnInit {
   list_Deletion = [];
   @Output() lists_Event = new EventEmitter<any>();
 
-  displayedColumns: string[] = ['risk_name', 'asset_name', 'linddun', 'stride', 'catagory'];
+  displayedColumns: string[] = ['risk_name', 'source_asset_name', 'target_asset_name', 'linddun', 'stride', 'catagory'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
    /** Whether the number of selected elements matches the total number of rows. */
@@ -129,7 +130,8 @@ export class ShowRiskDataEdgeComponent implements OnInit {
         id : risk.id,
         name_risk : risk.name,
         description : description,
-        asset : risk.edge.name,
+        source_asset : risk.edge.from,
+        target_asset : risk.edge.to,
         vulnerabilities : this.get_vulnerabilities(risk.vulnerabilities),
         treatments : this.get_treatments(risk.treatments),
         lindun : risk.payload.lindun,

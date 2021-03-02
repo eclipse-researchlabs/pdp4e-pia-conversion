@@ -190,7 +190,9 @@ export class ConversionService {
           description : risk.description,
           edge : {
             id : edge.id,
-            name : edge.name,
+            name : JSON.parse(edge.payload).Name,
+            from: data.assets.find(e=> e.id == edge.fromId).name,
+            to: data.assets.find(e=> e.id == edge.toId).name
           },
           vulnerabilities : risk.vulnerabilities,
           treatments : risk.treatments,

@@ -25,10 +25,16 @@
     <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)"> {{element.name_risk}} </td>
   </ng-container>
 
-  <!-- asset Column -->
-  <ng-container matColumnDef="asset_name">
-    <th mat-header-cell *matHeaderCellDef> ASSET NAME</th>
-    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)"> {{element.asset}} </td>
+  <!-- source asset Column -->
+  <ng-container matColumnDef="source_asset_name">
+    <th mat-header-cell *matHeaderCellDef> SOURCE ASSET</th>
+    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)"> {{element.source_asset}} </td>
+  </ng-container>
+
+  <!-- target asset Column -->
+  <ng-container matColumnDef="target_asset_name">
+    <th mat-header-cell *matHeaderCellDef> TARGET ASSET</th>
+    <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)"> {{element.target_asset}} </td>
   </ng-container>
 
   <!-- lindun Column -->
