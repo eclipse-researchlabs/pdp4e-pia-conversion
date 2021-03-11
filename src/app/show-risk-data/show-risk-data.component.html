@@ -51,7 +51,7 @@
     <th mat-header-cell *matHeaderCellDef scope="col"> CATEGORY  </th>
     <td mat-cell *matCellDef="let element" [style.background-color]="getbackgroundColor(element)">
       <mat-select  *ngIf="element.description == undefined" panelClass="example-panel-dark-blue"
-      formControlName="company" (selectionChange)="setCategory($event.value, element)">
+      (selectionChange)="setCategory($event.value, element)">
         <mat-option  *ngFor="let cust of ['Access','Modification','Deletion']"
         [value]="cust"> {{cust}}
       </mat-option>

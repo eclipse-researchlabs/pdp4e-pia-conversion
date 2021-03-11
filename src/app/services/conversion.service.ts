@@ -141,6 +141,7 @@ export class ConversionService {
       return val;
     },[]);
   }
+
   getPrivacyRisks1(data: any){
     console.log(data);
     var data_risk = [];
@@ -164,7 +165,7 @@ export class ConversionService {
             likelihood : risk.payload.likelihood
           }
         }
-        if(risk.vulnerabilities.some(v=>{
+        if(risk.payload.status != undefined && risk.payload.status != "null" && risk.vulnerabilities.some(v=>{
           return JSON.parse(v.payload).Framework=="Linddun";
         })){
           console.log(riskData);
@@ -203,7 +204,7 @@ export class ConversionService {
             likelihood : risk.payload.likelihood
           }
         }
-        if(risk.vulnerabilities.some(v=>{
+        if(risk.payload.status != undefined && risk.payload.status != "null" && risk.vulnerabilities.some(v=>{
           return JSON.parse(v.payload).Framework=="Linddun";
         })){
           console.log(riskData);
