@@ -31,6 +31,7 @@ export class ConfigurationComponent implements OnInit {
   {
     this.servers.testUrl(url).subscribe(
       r => {
+        console.log(r);
         if(r)
         {
           this.snack.open("Server is available", '', {duration: 3000});

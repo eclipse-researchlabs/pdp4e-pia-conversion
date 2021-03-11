@@ -10,9 +10,9 @@
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import {MatChipsModule} from '@angular/material/chips';
 import { HttpClientModule } from '@angular/common/http'
-
+import {MatRadioModule} from '@angular/material/radio';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,6 +37,10 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { DialogNewPiaComponent } from './dialog-new-pia/dialog-new-pia.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowRiskDataComponent } from './show-risk-data/show-risk-data.component';
+import { ShowRiskDataEdgeComponent } from './show-risk-data-edge/show-risk-data-edge.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { ModalConfigComponent } from './modal-config/modal-config.component';
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +49,9 @@ import { ShowRiskDataComponent } from './show-risk-data/show-risk-data.component
     DialogNewPia,
     RiskAssignmentComponent,
     DialogNewPiaComponent,
-    ShowRiskDataComponent
+    ShowRiskDataComponent,
+    ShowRiskDataEdgeComponent,
+    ModalConfigComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +74,18 @@ import { ShowRiskDataComponent } from './show-risk-data/show-risk-data.component
     MatCheckboxModule,
     MatStepperModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTabsModule,
+    MatRadioModule,
+    MatChipsModule,
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.wanderingCubes,
+      backdropBackgroundColour: 'rgba(0,0,0,0.1)',
+      backdropBorderRadius: '4px',
+      primaryColour: '#ffffff',
+      secondaryColour: '#ffffff',
+      tertiaryColour: '#ffffff'
+  })
   ],
   entryComponents: [
     DialogNewPia

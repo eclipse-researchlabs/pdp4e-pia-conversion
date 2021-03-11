@@ -1,13 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2021 TRIALOG
- * 
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- * 
- * SPDX-License-Identifier: EPL-2.0
- ******************************************************************************/
-
 import { Component,Input, Inject, OnInit, Output, EventEmitter} from '@angular/core';
 import { ConversionService } from '../services/conversion.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -20,7 +10,8 @@ export interface PeriodicElement {
   id : any;
   name_risk : string;
   description : string;
-  asset : string;
+  source_asset : string;
+  target_asset : string;
   vulnerabilities : Array<string>;
   treatments : Array<string>;
   lindun : string;
@@ -29,11 +20,11 @@ export interface PeriodicElement {
   impact : string;
 }
 @Component({
-  selector: 'app-show-risk-data',
-  templateUrl: './show-risk-data.component.html',
-  styleUrls: ['./show-risk-data.component.css']
+  selector: 'app-show-risk-data-edge',
+  templateUrl: './show-risk-data-edge.component.html',
+  styleUrls: ['./show-risk-data-edge.component.css']
 })
-export class ShowRiskDataComponent implements OnInit {
+export class ShowRiskDataEdgeComponent implements OnInit {
   @Input() data_risk;
   @Input() type = "";
   addNew = "addNew";
@@ -41,13 +32,12 @@ export class ShowRiskDataComponent implements OnInit {
   EDGE_ELEMENT_DATA: PeriodicElement[] = [];
   //risks=this.conversion.getPrivacyRisks(this.rmt.riskAnalyses[0]);
   risks_data ;
-  edges_risks_data ;
   list_access = [];
   list_modification = [];
   list_Deletion = [];
   @Output() lists_Event = new EventEmitter<any>();
 
-  displayedColumns: string[] = ['risk_name', 'asset_name', 'linddun', 'stride', 'catagory'];
+  displayedColumns: string[] = ['risk_name', 'source_asset_name', 'target_asset_name', 'linddun', 'stride', 'catagory'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
    /** Whether the number of selected elements matches the total number of rows. */
@@ -123,8 +113,7 @@ export class ShowRiskDataComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.risks_data = this.conversion.getPrivacyRisks1(this.data_risk);
-    this.edges_risks_data = this.conversion.getPrivacyRisksEdges(this.data_risk);
+    this.risks_data = this.conversion.getPrivacyRisksEdges(this.data_risk);
     console.log(this.risks_data );
     var i = 0;
     //Add data from nodes
@@ -141,7 +130,8 @@ export class ShowRiskDataComponent implements OnInit {
         id : risk.id,
         name_risk : risk.name,
         description : description,
-        asset : risk.asset.name,
+        source_asset : risk.edge.from,
+        target_asset : risk.edge.to,
         vulnerabilities : this.get_vulnerabilities(risk.vulnerabilities),
         treatments : this.get_treatments(risk.treatments),
         lindun : risk.payload.lindun,
@@ -156,35 +146,6 @@ export class ShowRiskDataComponent implements OnInit {
 
     });
     console.log(this.ELEMENT_DATA);
-    //Add data from edges
-    this.edges_risks_data.forEach(risk => {
-      console.log(risk);
-      let description;
-      if(this.type == "addNew")
-      {description == undefined;}
-      else {
-        description = risk.description;
-      }
-      let test : PeriodicElement = {
-        position : i++,
-        id : risk.id,
-        name_risk : risk.name,
-        description : description,
-        asset : risk.asset.name,
-        vulnerabilities : this.get_vulnerabilities(risk.vulnerabilities),
-        treatments : this.get_treatments(risk.treatments),
-        lindun : risk.payload.lindun,
-        stride : risk.payload.stride,
-        likelihood : risk.payload.likelihood,
-        impact : risk.payload.impact
-      }
-      console.log(this.type);
-
-
-        this.EDGE_ELEMENT_DATA.push(test);
-
-    });
-    console.log(this.EDGE_ELEMENT_DATA);
   }
 
   get_vulnerabilities(vulnerabilities){

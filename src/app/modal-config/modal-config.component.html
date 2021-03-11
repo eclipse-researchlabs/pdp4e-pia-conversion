@@ -1,0 +1,82 @@
+<div class="modal-header">
+  <div> <h2 mat-dialog-title class="modal-title">CONFIGURATION
+  <button type="button" class="close" style="float:right" data-dismiss="modal" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+</div>
+</div>
+<div>
+
+  <mat-horizontal-stepper #stepper>
+
+    <mat-step [stepControl]="firstFormGroup" errorMessage="All fields are required.">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>RISK MANAGEMENT</ng-template>
+        <div mat-dialog-content>
+          <div class="example-container">
+            <h3>Choose how you import risks</h3>
+            <mat-radio-group aria-label="Select an option" (change)="radioChange($event)">
+              <mat-radio-button value="1">IMPORT FILE FROM YOUR COUMPUTER</mat-radio-button>
+              <mat-radio-button value="2">CONNECT TO RISK MANAGEMENT SERVER</mat-radio-button>
+            </mat-radio-group>
+            <br>
+            <div *ngIf="showImport">
+              <br>
+            <button mat-raised-button color="basic">
+              <label for="file" style="color: black;"> <mat-icon input  aria-hidden="false" aria-label="nouveau pia">get_app</mat-icon>IMPORT RISKS</label>
+              <input type="file"
+                     id="file" style="display:none"
+                     (change)="onChange($event.target.files)">
+            </button>
+          </div>
+            <br>
+          <div *ngIf="showConnect">
+          <mat-form-field appearance="fill" style="width: 100%;">
+              <mat-label>RISK MANAGEMENT SERVER URL</mat-label>
+              <input matInput #risk_url formControlName="firstCtrl1" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill" style="width: 100%;">
+              <mat-label>RISK MANAGEMENT SERVER TOKEN</mat-label>
+              <input matInput #risk_token formControlName="firstCtrl2" required>
+          </mat-form-field>
+        </div>
+        </div>
+      </div>
+
+        <div>
+          <button mat-button matStepperNext  color="primary" cdkFocusInitial mat-raised-button style="float:right">Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <ngx-loading [show]="loading" [config]="{
+        backdropBackgroundColour: 'rgba(255,255,255,0.3)', backdropBorderRadius: '10px',
+        primaryColour: '#0080ff', secondaryColour: '#0080ff', tertiaryColour: '#0080ff' }" ></ngx-loading>
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>CONNECT TO THE TOOL OF CNIL (PIA)</ng-template>
+        <div mat-dialog-content>
+          <div class="example-container">
+            <p>Please, provide the address (URL) of the remote server:</p>
+          <mat-form-field appearance="fill" style="width: 100%;">
+              <mat-label>Server URL configuration</mat-label>
+              <input matInput #pia_url formControlName="secondCtrl" required>
+          </mat-form-field>
+
+          </div>
+      </div>
+        <br>
+        <div>
+          <button mat-button matStepperNext cdkFocusInitial mat-raised-button style="float:right" (click)="save()"color="primary">Save</button>
+          <button mat-button matStepperPrevious cdkFocusInitial mat-raised-button  color="primary">Back</button>
+
+        </div>
+      </form>
+    </mat-step>
+  </mat-horizontal-stepper>
+
+
+
+
+
+</div>

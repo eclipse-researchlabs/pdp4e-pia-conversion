@@ -12,6 +12,10 @@ import { Component,Input,Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { HttpClient } from '@angular/common/http';
+import {PiaService} from '../services/pia.service';
+import {SendPiaService} from '../services/send-pia.service';
+import {ImportService} from '../services/import.service';
 export interface answer {
   pia_id : any;
   reference_to : number;
@@ -31,17 +35,22 @@ export class DialogNewPiaComponent implements OnInit {
   secondFormGroup: FormGroup;
   answer_impact_acces : answer;
   answer_impact_modification : answer;
+  listData : any;
   answer_impact_deletion : answer;
-  answers = [];
-  measures = [];
+  addNew = "addNew";
+  //answers = [];
+  //measures = [];
   matrix_risk: number[][] = [[1,2,3],[1,2,2],[1,1,1]];
   constructor(private _formBuilder: FormBuilder,
+    private http: HttpClient,
+    private PiaService: PiaService,
+    private sendPiaService : SendPiaService,
+    private importService : ImportService,
     public dialogRef: MatDialogRef<DialogNewPiaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.data = this.data.data;
-    console.log(this.data);
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl1: ['', Validators.required],
       firstCtrl2: ['', Validators.required],
@@ -55,7 +64,7 @@ export class DialogNewPiaComponent implements OnInit {
   close() {
     this.dialogRef.close({ event: 'close'});
   }
-  //save PIA
+  //save PIA in file JSON
   save_pia(){
     if(this.firstFormGroup.value.firstCtrl1!="" &&this.firstFormGroup.value.firstCtrl2!="" && this.firstFormGroup.value.firstCtrl3 != "" && this.firstFormGroup.value.firstCtrl4  != "")
     {
@@ -79,12 +88,16 @@ export class DialogNewPiaComponent implements OnInit {
         "structure_data": "",
         "progress": 0
       },
-      "answers": this.answers,
-      "measures": this.measures,
+      "answers": this.importService.answers,
+      "measures": this.importService.measures,
       "evaluations": [],
       "comments": []
     };
-      var sJson = JSON.stringify(myJson);
+    //this.PiaService.addPia(this.firstFormGroup.value.firstCtrl1,this.firstFormGroup.value.firstCtrl2, this.firstFormGroup.value.firstCtrl3, this.firstFormGroup.value.firstCtrl4  );
+    if(localStorage.getItem('server_url') != ""){
+    this.saveNewPia();
+    }
+    var sJson = JSON.stringify(myJson);
       var element = document.createElement('a');
       element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(sJson));
       element.setAttribute('download', "primer-server-task.json");
@@ -97,75 +110,60 @@ export class DialogNewPiaComponent implements OnInit {
 
   //Define the different fields of each category from list of all risks(filter by category)
   set_category(lists : any){
-    this.answers = [];
+    this.listData = lists;
+    this.importService.answers = [];
 
     /**
      * NAME OF RISKS => IMPACT
      * create an answer (impact) for each risk (access, modification, deletion) : from reference of question, list of impact, gauge
      */
 
-    this.create_answers(this.getReference("access", "impact"), this.get_impact(lists[0][1]), null);
-    this.create_answers(this.getReference("modification", "impact"), this.get_impact(lists[1][1]), null);
-    this.create_answers(this.getReference("deletion", "impact"), this.get_impact(lists[2][1]), null);
+    this.importService.create_answers(this.getReference("access", "impact"), this.get_impact(lists[0][1]), null);
+    this.importService.create_answers(this.getReference("modification", "impact"), this.get_impact(lists[1][1]), null);
+    this.importService.create_answers(this.getReference("deletion", "impact"), this.get_impact(lists[2][1]), null);
 
     /**
      * TREATMENTS => MEASURES
      * create an answer (measures) for each risk (access, modification, deletion) : from reference of question, list of treatment, gauge
      */
 
-    this.create_answers(this.getReference("access", "measure"), this.get_list_treatment(lists[0][1]), null);
-    this.create_answers(this.getReference("modification", "measure"), this.get_list_treatment(lists[1][1]), null);
-    this.create_answers(this.getReference("deletion", "measure"), this.get_list_treatment(lists[2][1]), null);
+    this.importService.create_answers(this.getReference("access", "measure"), this.get_list_treatment(lists[0][1]), null);
+    this.importService.create_answers(this.getReference("modification", "measure"), this.get_list_treatment(lists[1][1]), null);
+    this.importService.create_answers(this.getReference("deletion", "measure"), this.get_list_treatment(lists[2][1]), null);
 
     /**
      * VULNERABILITIES => SOURCES
      * create an answer (sources) for each risk (access, modification, deletion) : from reference of question, list of vulnerabilities, gauge
      */
 
-    this.create_answers(this.getReference("access", "source"), this.get_list_vulnerabilities(lists[0][1]), null);
-    this.create_answers(this.getReference("modification", "source"), this.get_list_vulnerabilities(lists[1][1]), null);
-    this.create_answers(this.getReference("deletion", "source"), this.get_list_vulnerabilities(lists[2][1]), null);
+    this.importService.create_answers(this.getReference("access", "source"), this.get_list_vulnerabilities(lists[0][1]), null);
+    this.importService.create_answers(this.getReference("modification", "source"), this.get_list_vulnerabilities(lists[1][1]), null);
+    this.importService.create_answers(this.getReference("deletion", "source"), this.get_list_vulnerabilities(lists[2][1]), null);
 
     /**
     * LEVEL IMPACT => GRAVITE
     * create an answer (Level of impact) for each risk (access, modification, deletion) : from reference of question, list vide , gauge(level)
     */
 
-    this.create_answers(this.getReference("access", "impact_level"), [] , this.get_max_level(lists[0][1])[0]);
-    this.create_answers(this.getReference("modification", "impact_level"), [] , this.get_max_level(lists[1][1])[0]);
-    this.create_answers(this.getReference("deletion", "impact_level"), [] , this.get_max_level(lists[2][1])[0]);
+   this.importService.create_answers(this.getReference("access", "impact_level"), [] , this.get_max_level(lists[0][1])[0]);
+   this.importService.create_answers(this.getReference("modification", "impact_level"), [] , this.get_max_level(lists[1][1])[0]);
+   this.importService.create_answers(this.getReference("deletion", "impact_level"), [] , this.get_max_level(lists[2][1])[0]);
 
     /**
     * LIKELIHOOK => VRAISEMBLANCE
     * create an answer (level likelihood) for each risk (access, modification, deletion) : from reference of question, empty list, gauge(level)
     */
 
-    this.create_answers(this.getReference("access", "likelihood_level"), [] , this.get_max_level(lists[0][1])[1]);
-    this.create_answers(this.getReference("modification", "likelihood_level"), [] , this.get_max_level(lists[1][1])[1]);
-    this.create_answers(this.getReference("deletion", "likelihood_level"), [] , this.get_max_level(lists[2][1])[1]);
-    console.log(this.answers);
+   this.importService.create_answers(this.getReference("access", "likelihood_level"), [] , this.get_max_level(lists[0][1])[1]);
+   this.importService.create_answers(this.getReference("modification", "likelihood_level"), [] , this.get_max_level(lists[1][1])[1]);
+   this.importService.create_answers(this.getReference("deletion", "likelihood_level"), [] , this.get_max_level(lists[2][1])[1]);
 
-    this.measures = [];
+    this.importService.measures = [];
     //create a measures part
-    this.create_mesures(this.get_list_treatment(lists[0][1]));
-    this.create_mesures(this.get_list_treatment(lists[1][1]));
-    this.create_mesures(this.get_list_treatment(lists[2][1]));
+    this.importService.create_mesures(this.get_list_treatment(lists[0][1]));
+    this.importService.create_mesures(this.get_list_treatment(lists[1][1]));
+    this.importService.create_mesures(this.get_list_treatment(lists[2][1]));
 
-  }
-
-  /* create an answer from reference of question, list of treatment, gauge*/
-
-  create_answers( reference, list_impact , gauge){
-    var answer_impact_acces = {
-      "reference_to" : reference,
-      "data" : {
-        "text" : null,
-        "gauge" : gauge,
-        "list" : list_impact
-      },
-      "created_at" : new Date()
-    };
-    this.answers.push(answer_impact_acces);
   }
 
   /* get all impacts from list of risks */
@@ -234,7 +232,7 @@ export class DialogNewPiaComponent implements OnInit {
     }
   }
 
-  /* get the biggest level from list of risks) */
+  /* get the biggest level from list of risks */
   get_max_level(list)
   { var max_level = 0;
     var riskMaxLevels = [0,0];
@@ -248,7 +246,7 @@ export class DialogNewPiaComponent implements OnInit {
     return riskMaxLevels;
   }
 
-   /* get the biggest level from list of risks) */
+   /* get the biggest level from list of risks */
   get_list_treatment(list){
     console.log(list);
     //to do get list all treatments
@@ -273,21 +271,52 @@ export class DialogNewPiaComponent implements OnInit {
     return new_list;
   }
 
-  /* create a list of measures (json) from list of measures */
-  create_mesures(list_measures : Array<string>){
-    var i =0;
-    if(list_measures != []){
-      list_measures.forEach(element => {
-      var mesure_json = {
-        "title": element,
-        "content": "",
-        "placeholder": "measures.default_placeholder",
-        "created_at": new Date(),
-        "updated_at": new Date()
-      };
-      this.measures.push(mesure_json);
-      });
-      console.log(this.measures);
+/**
+ * Save a new PIA in the backend of the tool of CNIL
+ */
+
+  async saveNewPia() {
+    return new Promise((resolve, reject) => {
+      this.sendPiaService.create_Pia(this.firstFormGroup.value.firstCtrl1, this.firstFormGroup.value.firstCtrl2, this.firstFormGroup.value.firstCtrl3, this.firstFormGroup.value.firstCtrl4).then(id => {
+        const id_pia = id;
+        if(this.listData != undefined){
+
+          if(this.listData[0][1].length != 0){
+            this.send_all_answers(id_pia, "access", this.listData[0][1] );
+          }
+          if(this.listData[1][1].length != 0){
+            this.send_all_answers(id_pia, "modification", this.listData[1][1] );
+          }
+          if(this.listData[2][1].length != 0){
+            this.send_all_answers(id_pia, "deletion", this.listData[2][1] );
+          }
     }
+        resolve(id);
+        this.close();
+      });
+    });
+
+  }
+
+  /**
+  * Send all answers in the backend of the tool of CNIL from pia_id, the type of the risk and data
+  */
+  send_all_answers (pia_id, type , listData){
+
+     //impact
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "impact") , this.get_impact(listData), null );
+    //measures
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "measure"), this.get_list_treatment(listData), null);
+    //sources
+    this.sendPiaService.save_answer(pia_id,this.getReference(type, "source"), this.get_list_vulnerabilities(listData), null);
+    //gravite
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "impact_level"), [] , this.get_max_level(listData)[0]);
+    //vraisemblance
+    this.sendPiaService.save_answer(pia_id, this.getReference(type, "likelihood_level"), [] , this.get_max_level(listData)[1]);
+
+    this.get_list_treatment(listData).forEach(element => {
+      this.sendPiaService.save_measure(pia_id, element );
+    });
+
   }
 }

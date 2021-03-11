@@ -53,7 +53,10 @@
       <ng-template matStepLabel>Export to this new PIA</ng-template>
       <h3 style="color: rgb(1, 1, 14);">Assign a category to each risks</h3>
       <mat-dialog-content class="mat-typography">
-        <app-show-risk-data [data_risk] = "data" (lists_Event)="set_category($event)"></app-show-risk-data>
+        Risks from Nodes:<br/>
+        <app-show-risk-data [data_risk] = "data" [type] ="addNew" (lists_Event)="set_category($event)"></app-show-risk-data>
+        Risks from Edges:<br/>
+        <app-show-risk-data-edge [data_risk] = "data" [type] ="addNew" (lists_Event)="set_category($event)"></app-show-risk-data-edge>
       </mat-dialog-content>
       <br>
       <div>

@@ -9,6 +9,7 @@
  ******************************************************************************/
 
 import { Injectable } from '@angular/core';
+import { Console } from 'console';
 import { PiaService } from './pia.service';
 import { RmtService } from './rmt.service';
 
@@ -127,7 +128,12 @@ export class ConversionService {
   //Returns all risks related to privacy: ie with a valid LINDDUN category
   getPrivacyRisks(data: any): any[] {
     return data.assets.reduce((acc, asset) => {
-      let val=acc.concat(asset.risks.filter(risk => { return risk.payload.linddun != undefined; })
+      let val=acc.concat(asset.risks.filter(risk => {
+        console.log(risk.vulnerabilities);
+        return risk.vulnerabilities.some(v=>{
+          return JSON.parse(v.payload).Framework=="Linddun";
+        })
+      })
       //.map(risk => risk.asset = { id: asset.id, name: asset.name })
       );
       console.log(val);
@@ -145,7 +151,9 @@ export class ConversionService {
       return val;
     },[]);
   }
+
   getPrivacyRisks1(data: any){
+    console.log(data);
     var data_risk = [];
     data.assets.forEach(asset => {
 
@@ -167,7 +175,48 @@ export class ConversionService {
             likelihood : risk.payload.likelihood
           }
         }
-        if(risk.payload.lindun!= undefined){
+        if(risk.payload.status != undefined && risk.payload.status != "null" && risk.vulnerabilities.some(v=>{
+          return JSON.parse(v.payload).Framework=="Linddun";
+        })){
+          console.log(riskData);
+          data_risk.push(riskData);
+        }
+
+      });
+
+
+
+    });
+    return data_risk;
+  }
+
+  getPrivacyRisksEdges(data: any){
+    var data_risk = [];
+    data.edges.forEach(edge => {
+
+      edge.risks.forEach(risk => {
+        var riskData = {
+          id : risk.id,
+          name : risk.name,
+          description : risk.description,
+          edge : {
+            id : edge.id,
+            name : JSON.parse(edge.payload).Name,
+            from: data.assets.find(e=> e.id == edge.fromId).name,
+            to: data.assets.find(e=> e.id == edge.toId).name
+          },
+          vulnerabilities : risk.vulnerabilities,
+          treatments : risk.treatments,
+          payload : {
+            stride : risk.payload.stride,
+            lindun : risk.payload.lindun,
+            impact : risk.payload.impact,
+            likelihood : risk.payload.likelihood
+          }
+        }
+        if(risk.payload.status != undefined && risk.payload.status != "null" && risk.vulnerabilities.some(v=>{
+          return JSON.parse(v.payload).Framework=="Linddun";
+        })){
           console.log(riskData);
           data_risk.push(riskData);
         }

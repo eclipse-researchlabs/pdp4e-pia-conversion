@@ -9,12 +9,30 @@
      ******************************************************************************* -->
 
 <mat-toolbar>
-  <mat-toolbar-row>{{title}}</mat-toolbar-row>
-  <mat-toolbar-row>
-    <nav>
-      <a mat-button routerLink="/analyses">View Analyses</a>
-      <a mat-button routerLink="/config">Config</a>
-    </nav>
+  <mat-toolbar-row><img height="50px" src="assets/pdp4e-logo.jpg">{{title}}
+    <button mat-icon-button color="warn" (click)="openConfigDialog()" >
+    <mat-icon input type = "submit" aria-hidden="false" >settings</mat-icon>
+  </button>
   </mat-toolbar-row>
+
+
+      <!--
+         <mat-toolbar-row>
+         <nav>
+ <a mat-button routerLink="/analyses">View Analyses</a>
+      <a mat-button routerLink="/config">Config</a>
+      <button mat-raised-button (click)="openConfigDialog()">CONFIGURATION</button>
+       </nav>
+       </mat-toolbar-row>
+    -->
+
+
 </mat-toolbar>
-<router-outlet></router-outlet>
+<router-outlet>
+  <!--
+ <mat-card style="text-align: center;">
+    <h3>Analyses</h3> </mat-card>
+    <app-analyses-view [server_url] = "url_server" [data_risk] ="data_risk"></app-analyses-view>
+  -->
+
+</router-outlet>

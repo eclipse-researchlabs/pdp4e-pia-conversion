@@ -8,21 +8,52 @@
      *SPDX-License-Identifier: EPL-2.0
      ******************************************************************************* -->
 
+<ngx-loading [show]="loading" [config]="{
+  backdropBackgroundColour: 'rgba(255,255,255,0.3)', backdropBorderRadius: '10px',
+  primaryColour: '#0080ff', secondaryColour: '#0080ff', tertiaryColour: '#0080ff' }" ></ngx-loading>
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="3" rowHeight="350px">
-    <mat-grid-tile *ngFor="let card of cards">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{card.name}}
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <button mat-button (click)="openNewPiaDialog(card)">Export to new PIA</button>
-          <button mat-button (click)="openAssignment(card)">Export to PIA</button>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
+  <mat-grid-list cols="3">
+    <mat-tab-group>
+      <mat-tab *ngFor="let card of cards" [label]="card.name">
+        <br>
+        <button mat-raised-button (click)="openNewPiaDialog(card)">Export to new PIA</button>
+        <br>
+        <br>
+        <div>
+          <table mat-table [dataSource]="pias" class="mat-elevation-z8">
+          <ng-container matColumnDef="PIA_name">
+            <th mat-header-cell *matHeaderCellDef> PIA NAME </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="AUTHOR">
+            <th mat-header-cell *matHeaderCellDef> AUTHOR </th>
+            <td mat-cell *matCellDef="let element"> {{element.author_name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="EVALUATOR">
+            <th mat-header-cell *matHeaderCellDef> EVALUATOR </th>
+            <td mat-cell *matCellDef="let element"> {{element.evaluator_name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="VALIDATOR">
+            <th mat-header-cell *matHeaderCellDef> VALIDATOR </th>
+            <td mat-cell *matCellDef="let element"> {{element.validator_name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ACTION">
+            <th mat-header-cell *matHeaderCellDef>  </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="form-group row">
+              <button mat-raised-button (click)="openAssignment(card, element.id)">Export to this PIA</button>
+              <button mat-raised-button (click)="deletePia(element.id)">Delete</button>
+            </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <br>
+      </div>
+      </mat-tab>
+
+    </mat-tab-group>
   </mat-grid-list>
 </div>
